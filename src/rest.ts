@@ -158,13 +158,15 @@ async function handleDelete(c: Context<{ Bindings: Env }>, tableName: string, id
 export async function handleRest(c: Context<{ Bindings: Env }>): Promise<Response> {
     const url = new URL(c.req.url);
     const pathParts = url.pathname.split('/').filter(Boolean);
-    
-    if (pathParts.length < 2) {
+
+    // Support both /rest/{table}/{id?} and /public/rest/{table}/{id?}
+    const restIndex = pathParts.indexOf('rest');
+    if (restIndex === -1 || pathParts.length <= restIndex + 1) {
         return c.json({ error: 'Invalid path. Expected format: /rest/{tableName}/{id?}' }, 400);
     }
 
-    const tableName = pathParts[1];
-    const id = pathParts[2];
+    const tableName = pathParts[restIndex + 1];
+    const id = pathParts[restIndex + 2];
     
     switch (c.req.method) {
         case 'GET':

@@ -32,7 +32,7 @@ export default {
         const app = new Hono<{ Bindings: Env }>();
 
         // Apply CORS to all routes
-        app.use('*', async (c, next) => {
+        app.use('*', async (c: Context<{ Bindings: Env }>, next: Next) => {
             return cors()(c, next);
         })
 
@@ -60,10 +60,14 @@ export default {
         };
 
         // CRUD REST endpoints made available to all of our tables
+        // Public READ-ONLY mirror for the HTML viewer (no auth, GET only)
+        app.get('/public/rest/*', handleRest);
+
+        // Protected endpoints (require Bearer token)
         app.all('/rest/*', authMiddleware, handleRest);
 
         // Execute a raw SQL statement with parameters with this route
-        app.post('/query', authMiddleware, async (c) => {
+        app.post('/query', authMiddleware, async (c: Context<{ Bindings: Env }>) => {
             try {
                 const body = await c.req.json();
                 const { query, params } = body;
@@ -82,6 +86,9 @@ export default {
                 return c.json({ error: error.message }, 500);
             }
         });
+
+        // Static assets and default route
+        app.get('/', (c: Context) => c.redirect('/viewer.html', 302));
 
         return app.fetch(request, env, ctx);
     }

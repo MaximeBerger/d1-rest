@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>D1 Viewer</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
+    .row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    input, button { padding: 8px 12px; font-size: 16px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { position: sticky; top: 0; background: #f6f6f6; }
+    .muted { color: #666; font-size: 14px; }
+    .error { color: #b00020; }
+    .ok { color: #0a7a0a; }
+    pre { background: #f7f7f7; padding: 12px; overflow: auto; }
+  </style>
+  <script>
+    function buildUrl(table) {
+      const base = '';
+      return `/public/rest/${encodeURIComponent(table)}`;
+    }
+
+    async function fetchRows() {
+      const table = document.getElementById("tableName").value.trim();
+      const status = document.getElementById("status");
+      const result = document.getElementById("result");
+      result.innerHTML = "";
+
+      if (!table) {
+        status.innerHTML = '<span class="error">Renseigne le nom de la table.</span>';
+        return;
+      }
+
+      status.textContent = "Chargement...";
+      try {
+        const res = await fetch(buildUrl(table), { method: "GET" });
+        const text = await res.text();
+
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          document.getElementById("result").innerHTML = "<h3>Réponse brute</h3><pre></pre>";
+          document.querySelector("#result pre").textContent = text;
+          status.innerHTML = res.ok ? '<span class="ok">Réponse reçue (non-JSON).</span>' : `<span class="error">Erreur HTTP ${res.status}</span>`;
+          return;
+        }
+
+        const rows = Array.isArray(data) ? data : (data.rows || data.results || data.result || []);
+        if (!Array.isArray(rows) || rows.length === 0) {
+          status.innerHTML = '<span class="ok">Aucune ligne trouvée.</span>';
+          result.innerHTML = "<p class='muted'>La table est vide ou le format n’est pas reconnu.</p>";
+          return;
+        }
+
+        const cols = Array.from(rows.reduce((set, row) => {
+          Object.keys(row || {}).forEach(k => set.add(k));
+          return set;
+        }, new Set()));
+
+        const tableEl = document.createElement("table");
+        const thead = document.createElement("thead");
+        const trHead = document.createElement("tr");
+        cols.forEach(c => {
+          const th = document.createElement("th");
+          th.textContent = c;
+          trHead.appendChild(th);
+        });
+        thead.appendChild(trHead);
+        tableEl.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        rows.forEach(row => {
+          const tr = document.createElement("tr");
+          cols.forEach(c => {
+            const td = document.createElement("td");
+            const v = row?.[c];
+            td.textContent = typeof v === "object" ? JSON.stringify(v) : String(v ?? "");
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        tableEl.appendChild(tbody);
+
+        result.appendChild(tableEl);
+        status.innerHTML = '<span class="ok">Terminé.</span>';
+      } catch (err) {
+        console.error(err);
+        status.innerHTML = `<span class="error">Erreur : ${err?.message || err}</span>`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById("btnLoad").addEventListener("click", fetchRows);
+    });
+  </script>
+</head>
+<body>
+  <h1>D1 Viewer</h1>
+  <p class="muted">Cette page est servie par le même Worker et interroge l’endpoint public lecture seule.</p>
+
+  <div class="row">
+    <label for="tableName">Nom de la table :</label>
+    <input id="tableName" type="text" size="24" placeholder="ma_table" />
+    <button id="btnLoad">Charger</button>
+  </div>
+
+  <div id="status" class="muted">Prêt.</div>
+  <div id="result"></div>
+</body>
+</html>
+
+
