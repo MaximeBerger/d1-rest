@@ -87,6 +87,56 @@ export default {
             }
         });
 
+        // Public endpoint to submit QCM results (no Authorization header required)
+        app.post('/public/qcm', async (c: Context<{ Bindings: Env }>) => {
+            try {
+                // Optional lightweight origin check (best-effort)
+                const origin = c.req.header('Origin') || '';
+                const url = new URL(c.req.url);
+                if (origin && origin !== `${url.protocol}//${url.host}`) {
+                    return c.json({ error: 'Forbidden origin' }, 403);
+                }
+
+                const body = await c.req.json();
+                if (!body || typeof body !== 'object') {
+                    return c.json({ error: 'Invalid JSON body' }, 400);
+                }
+
+                // Whitelist expected fields
+                const session_id = String(body.session_id || '').slice(0, 128);
+                const started_at = body.started_at ? String(body.started_at) : null;
+                const completed_at = body.completed_at ? String(body.completed_at) : null;
+                const num_themes = Number.isFinite(Number(body.num_themes)) ? Number(body.num_themes) : null;
+                const num_questions_total = Number.isFinite(Number(body.num_questions_total)) ? Number(body.num_questions_total) : null;
+                const num_correct_total = Number.isFinite(Number(body.num_correct_total)) ? Number(body.num_correct_total) : null;
+                const themes = Array.isArray(body.themes) ? JSON.stringify(body.themes) : null;
+
+                if (!session_id || !completed_at) {
+                    return c.json({ error: 'Missing required fields: session_id, completed_at' }, 400);
+                }
+
+                const sql = `INSERT INTO quiz_sessions
+                    (session_id, started_at, completed_at, num_themes, num_questions_total, num_correct_total, themes)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+                await c.env.DB.prepare(sql)
+                    .bind(
+                        session_id,
+                        started_at,
+                        completed_at,
+                        num_themes,
+                        num_questions_total,
+                        num_correct_total,
+                        themes,
+                    )
+                    .run();
+
+                return c.json({ ok: true }, 201);
+            } catch (error: any) {
+                return c.json({ error: error.message || String(error) }, 500);
+            }
+        });
+
         // Static assets and default route
         app.get('/', (c: Context) => c.redirect('/viewer.html', 302));
 
