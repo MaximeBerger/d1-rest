@@ -192,7 +192,7 @@ function renderQuizFrame() {
   if (questionOverlay) questionOverlay.style.display = '';
   if (answersOverlay) answersOverlay.style.display = '';
   // Ré-afficher le bouton "Suivante"
-  if (btnNext) btnNext.style.visibility = 'visible';
+  // if (btnNext) btnNext.style.visibility = 'visible';
   // Ré-afficher la section Statistiques pendant le questionnaire
   const stats = getStatsSection();
   if (stats) stats.style.display = '';

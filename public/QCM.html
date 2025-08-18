@@ -11,19 +11,26 @@
       background: transparent;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     }
-    .page { display:flex; flex-direction:column; align-items:center; gap:20px; padding:16px; background:transparent; }
+    .page { display:flex; flex-direction:column; align-items:center; gap:20px; padding:16px; background:transparent; position:relative; z-index:1; }
     .title-container { text-align:center; margin-bottom:20px; }
     .title-container h1 { font-size:28px; font-weight:700; color:#1f2937; margin:0; letter-spacing:-0.5px; }
     .content { display:flex; align-items:flex-start; gap:20px; }
 
+    /* Arrière-plan image plein écran */
+    #bgImage { position:fixed; inset:0; z-index:0; pointer-events:none; background: url('data/EnTete.png') center/cover no-repeat; }
+
     #container {
       position: relative; width: 800px; height: 626px; overflow: hidden;
-      border: 1px solid #ccc; border-radius: 8px; background: transparent;
+      border: 1px solid #ccc; border-radius: 8px; background: rgba(255,255,255,0.7);
       box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     #panel {
-      width: 300px; height: 600px; padding: 12px; border-radius: 10px; background: transparent;
+      width: 300px; height: 600px; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.85);
       border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.12); overflow: auto;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     #questionOverlay {
@@ -49,6 +56,10 @@
       display:flex; align-items:center; /* centrer verticalement */
       font-size:24px; color:#1f2937; /* un peu moins grand que l'énoncé */
       padding-left:14px; /* même padding que le canvas */
+      transition: background-color .2s ease, color .2s ease;
+    }
+    #answersOverlay .answerItem.selected {
+      background:#000; color:#fff; border-radius:10px;
     }
 
     .btn {
@@ -107,6 +118,7 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
 </head>
 <body>
+  <div id="bgImage" aria-hidden="true" tabindex="-1"></div>
   <div class="page">
     <div class="title-container">
       <h1>Question à choix multiples</h1>
@@ -128,7 +140,7 @@
 
       <div id="panel">
         <div class="btn-row">
-          <button class="btn" id="btnNext" title="Passer à la question suivante">Suivante</button>
+          <!-- <button class="btn" id="btnNext" title="Passer à la question suivante">Suivante</button> -->
         </div>
 
         <div class="panel-section">

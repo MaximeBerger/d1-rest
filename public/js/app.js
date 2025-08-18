@@ -208,7 +208,8 @@ function renderAnswersGroups(currentList, nextList = null) {
     const group = document.createElement('div');
     group.className = 'answersGroup';
     group.id = id;
-    for (const c of list) {
+    for (let i = 0; i < list.length; i++) {
+      const c = list[i];
       const div = document.createElement('div');
       div.className = 'answerItem';
       div.style.left = c.x + 'px';
@@ -218,8 +219,11 @@ function renderAnswersGroups(currentList, nextList = null) {
       div.style.display = 'flex';
       div.style.alignItems = 'center';
       div.style.fontSize = '24px';
-      div.style.color = '#1f2937';
+      // pas de style color inline: laisser le CSS contrôler (et .selected basculer en blanc)
       div.style.paddingLeft = '14px';
+      if (id === 'answersGroupCurrent' && i === selectedIndex) {
+        div.classList.add('selected');
+      }
       div.innerHTML = (c.id ? `<strong>${c.id} — </strong>` : '') + c.text;
       group.appendChild(div);
     }
@@ -244,6 +248,8 @@ const autoAdvanceDelay = 700;
 let pendingNextIndex = null;
 let locked = false;
 let modalOpen = false;
+let hoveredIndex = -1;
+let selectedIndex = -1;
 
 function refreshStats() {
   if (!state.current) return;
@@ -280,6 +286,7 @@ function loadQuestion(idx) {
   qIndex = idx;
   tries = 0;
   locked = false;
+  selectedIndex = -1;
   cards = quizPrepare(qIndex);
   layoutCards();
   refreshStats();
@@ -320,7 +327,11 @@ window.__themeQuiz = {
       const groupCur = document.getElementById('answersGroupCurrent');
       const groupNext = document.getElementById('answersGroupNext');
       if (groupCur) groupCur.style.transform = `translateY(${offsetCurY}px)`;
-      if (groupNext) groupNext.style.transform = `translateY(${offsetNextY}px)`;
+      if (groupNext) {
+        groupNext.style.transform = `translateY(${offsetNextY}px)`;
+        // Masquer totalement le prochain groupe pendant le défilement
+        groupNext.style.opacity = '0';
+      }
       if (u >= 1) {
         transitioning = false;
         cards = nextCards;
@@ -329,6 +340,7 @@ window.__themeQuiz = {
         pendingNextIndex = null;
         tries = 0;
         locked = false;
+        selectedIndex = -1;
         layoutCards();
         refreshStats();
         refreshQuestionOverlay();
@@ -348,11 +360,33 @@ window.__themeQuiz = {
     p.stroke(230); p.noFill();
     p.rect(margin, margin, W - 2*margin, headerH, 12);
 
+    // Détection de survol (hover) côté canvas
+    hoveredIndex = -1;
+    p.cursor('default');
+    if (!locked && !transitioning && !modalOpen && state.current) {
+      for (let k = 0; k < cards.length; k++) {
+        const c = cards[k];
+        if (p.mouseX >= c.x && p.mouseX <= c.x + c.w && p.mouseY >= c.y && p.mouseY <= c.y + c.h) {
+          hoveredIndex = k;
+          p.cursor('pointer');
+          break;
+        }
+      }
+    }
+
     // Réponses
-    for (const c of cards) {
+    for (let k = 0; k < cards.length; k++) {
+      const c = cards[k];
       let bg = p.color(255), border = p.color(229), txt = p.color(31,41,55);
       if (c.state === 'wrong') { bg = p.color(254,242,242); border = p.color(252,165,165); txt = p.color(153,27,27); }
       if (c.state === 'right') { bg = p.color(240,253,244); border = p.color(134,239,172); txt = p.color(22,101,52); }
+      // Effet hover visuel en mode idle
+      const isHover = (k === hoveredIndex) && c.state === 'idle' && !locked && !transitioning && !modalOpen;
+      if (isHover) {
+        bg = p.color(249,250,251); // #f9fafb
+        // petite ombre portée
+        p.noStroke(); p.fill(0, 0, 0, 20); p.rect(c.x, c.y + 4, c.w, c.h, 10);
+      }
       p.noStroke(); p.fill(bg); p.rect(c.x, c.y, c.w, c.h, 10);
       p.stroke(border); p.noFill(); p.rect(c.x, c.y, c.w, c.h, 10);
       p.noStroke(); p.fill(txt); p.textSize(24); p.textAlign(p.LEFT, p.CENTER);
@@ -364,6 +398,16 @@ window.__themeQuiz = {
     if (i === -1) return;
     // Mode examen: pas de coloration ni modale
     const c = cards[i];
+    // Sélection visuelle via CSS (overlay)
+    selectedIndex = i;
+    const groupCur = document.getElementById('answersGroupCurrent');
+    if (groupCur) {
+      const items = groupCur.querySelectorAll('.answerItem');
+      items.forEach((el, idx) => {
+        if (idx === selectedIndex) el.classList.add('selected');
+        else el.classList.remove('selected');
+      });
+    }
     if (c.correct) success++;
     locked = true;
     refreshStats();
