@@ -1,6 +1,7 @@
 import { Hono, Context, Next } from "hono";
 import { cors } from "hono/cors";
 import { handleRest } from './rest';
+import { themes } from './themes';
 
 export interface Env {
     DB: D1Database;
@@ -85,6 +86,11 @@ export default {
             } catch (error: any) {
                 return c.json({ error: error.message }, 500);
             }
+        });
+
+        // Public endpoint to serve themes (no Authorization header required)
+        app.get('/public/themes', async (c: Context<{ Bindings: Env }>) => {
+            return c.json(themes);
         });
 
         // Public endpoint to submit QCM results (no Authorization header required)

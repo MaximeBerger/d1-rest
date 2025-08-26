@@ -28,6 +28,33 @@ window.renderThemesHome = function() {
   hTitle.style.cssText = 'font-size:20px; font-weight:700; color:#111827;';
   hTitle.textContent = 'Choisis un thème';
   header.appendChild(hTitle);
+  
+  // Ajouter un bouton pour enregistrer tous les scores si des thèmes sont terminés
+  const completedThemes = window.state.themes.filter(t => t.done);
+  if (completedThemes.length > 0) {
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Enregistrer tous les scores';
+    saveButton.style.cssText = `
+      padding: 8px 16px;
+      background: #7aa2ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    `;
+    saveButton.addEventListener('click', async () => {
+      if (window.scoreManager) {
+        try {
+          await window.scoreManager.saveAllScores(window.state.themes);
+        } catch (error) {
+          console.error('Erreur lors de l\'enregistrement des scores:', error);
+        }
+      }
+    });
+    header.appendChild(saveButton);
+  }
   const grid = document.createElement('div');
   grid.id = 'themesGrid';
   grid.style.cssText = 'display:flex; flex-direction:column; gap:16px; padding:16px; overflow:auto;';
@@ -122,12 +149,27 @@ window.startTheme = function(themeId) {
 
 window.endTheme = function() {
   if (!window.state.current) return;
+  
   // Marque le thème comme fait et détruit l'engine
   const idx = window.state.themes.findIndex(t => t.id === window.state.current.id);
   if (idx !== -1) {
     window.state.themes[idx].done = true;
     // Enregistre le score final du thème
     window.state.themes[idx].score = `${success}/${window.state.current.engine.total}`;
+    
+    // Enregistrer le score dans la base de données
+    if (window.scoreManager) {
+      const themeData = window.THEMES.find(t => t.id === window.state.current.id);
+      if (themeData) {
+        window.scoreManager.saveThemeScore(
+          themeData,
+          success,
+          window.state.current.engine.total
+        ).catch(error => {
+          console.error('Erreur lors de l\'enregistrement du score:', error);
+        });
+      }
+    }
   }
   window.state.current = null;
   window.renderThemesHome();
