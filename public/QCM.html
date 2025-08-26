@@ -171,6 +171,8 @@
     </div>
   </div>
 
+  <script type="module" src="qcm/score-manager.js"></script>
+  <script type="module" src="qcm/app.js"></script>
   <script type="module">
     // Chargement des thèmes depuis le fichier JSON
     window.THEMES = [];
@@ -227,7 +229,7 @@
     window.overlay = document.getElementById('modalOverlay');
     window.modalBody = document.getElementById('modalBody');
     window.btnClose = document.getElementById('btnClose');
-
+    
     // Initialiser le gestionnaire de scores
     window.scoreManager = new ScoreManager();
     
@@ -237,8 +239,6 @@
     // Exposer la fonction renderThemesHome globalement pour qu'elle soit accessible depuis app.js
     window.renderThemesHome = null; // Sera définie dans app.js
   </script>
-  <script type="module" src="qcm/score-manager.js"></script>
-  <script type="module" src="qcm/app.js"></script>
   <script>
     const sketch = (p) => {
       const W = 800, H = 600, margin = 24, headerH = 160;
