@@ -54,26 +54,11 @@ export default {
           }
   
           // Schéma
-          await env.DB.exec(`CREATE TABLE IF NOT EXISTS students (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            external_id TEXT UNIQUE
-          );`);
+          await env.DB.exec(`CREATE TABLE IF NOT EXISTS students (id INTEGER PRIMARY KEY AUTOINCREMENT, external_id TEXT UNIQUE)`);
   
-          await env.DB.exec(`CREATE TABLE IF NOT EXISTS sujet (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            session TEXT NOT NULL,
-            theme TEXT NOT NULL,
-            UNIQUE(session, theme)
-          );`);
+          await env.DB.exec(`CREATE TABLE IF NOT EXISTS sujet (id INTEGER PRIMARY KEY AUTOINCREMENT, session TEXT NOT NULL, theme TEXT NOT NULL, UNIQUE(session, theme))`);
   
-          await env.DB.exec(`CREATE TABLE IF NOT EXISTS student_theme_scores (
-            student_id INTEGER NOT NULL,
-            theme_id INTEGER NOT NULL,
-            score INTEGER NOT NULL,
-            max_score INTEGER NOT NULL,
-            updated_at TEXT NOT NULL,
-            PRIMARY KEY (student_id, theme_id)
-          );`);
+          await env.DB.exec(`CREATE TABLE IF NOT EXISTS student_theme_scores (student_id INTEGER NOT NULL, theme_id INTEGER NOT NULL, score INTEGER NOT NULL, max_score INTEGER NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY (student_id, theme_id))`);
   
           // Référentiels
           await env.DB.prepare(
@@ -95,12 +80,7 @@ export default {
   
           // UPSERT
           await env.DB.prepare(
-            `INSERT INTO student_theme_scores (student_id, theme_id, score, max_score, updated_at)
-             VALUES (?, ?, ?, ?, datetime('now'))
-             ON CONFLICT(student_id, theme_id) DO UPDATE SET
-               score = excluded.score,
-               max_score = excluded.max_score,
-               updated_at = datetime('now')`
+            `INSERT INTO student_theme_scores (student_id, theme_id, score, max_score, updated_at) VALUES (?, ?, ?, ?, datetime('now')) ON CONFLICT(student_id, theme_id) DO UPDATE SET score = excluded.score, max_score = excluded.max_score, updated_at = datetime('now')`
           ).bind(s?.id, t?.id, score, max_score).run();
   
           return json({ ok: true, external_id, theme_code, score, max_score }, 200, cors);
