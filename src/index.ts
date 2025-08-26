@@ -57,14 +57,14 @@ export default {
           await env.DB.exec(`CREATE TABLE IF NOT EXISTS students (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             external_id TEXT UNIQUE
-          )`);
+          );`);
   
           await env.DB.exec(`CREATE TABLE IF NOT EXISTS sujet (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             session TEXT NOT NULL,
             theme TEXT NOT NULL,
             UNIQUE(session, theme)
-          )`);
+          );`);
   
           await env.DB.exec(`CREATE TABLE IF NOT EXISTS student_theme_scores (
             student_id INTEGER NOT NULL,
@@ -73,7 +73,7 @@ export default {
             max_score INTEGER NOT NULL,
             updated_at TEXT NOT NULL,
             PRIMARY KEY (student_id, theme_id)
-          )`);
+          );`);
   
           // Référentiels
           await env.DB.prepare(
