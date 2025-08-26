@@ -123,7 +123,7 @@ window.endTheme = async function() {
     // Affichage dans la console du nom de l'étudiant, du thème et du score
     const studentName = document.getElementById('studentName')?.value || 'Étudiant non identifié';
     const themeName = window.state.current.label;
-    const finalScore = `${success}/${window.state.current.engine.total}`;
+    const finalScore = success;
     console.log(`Étudiant: ${studentName} | Thème: ${themeName} | Score: ${finalScore}`);
 
     const payload = {
