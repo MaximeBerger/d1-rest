@@ -1,7 +1,6 @@
 import { Hono, Context, Next } from "hono";
 import { cors } from "hono/cors";
 import { handleRest } from './rest';
-import { themes } from './themes';
 
 export interface Env {
     DB: D1Database;
