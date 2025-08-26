@@ -26,125 +26,103 @@ export interface Env {
 
 // # Delete a user
 // DELETE /rest/users/123
-
 export default {
-    async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-        const app = new Hono<{ Bindings: Env }>();
-
-        // Apply CORS to all routes
-        app.use('*', async (c: Context<{ Bindings: Env }>, next: Next) => {
-            return cors()(c, next);
-        })
-
-        // Secret Store key value that we have set
-        const secret = await env.SECRET.get();
-
-        // Authentication middleware that verifies the Authorization header
-        // is sent in on each request and matches the value of our Secret key.
-        // If a match is not found we return a 401 and prevent further access.
-        const authMiddleware = async (c: Context, next: Next) => {
-            const authHeader = c.req.header('Authorization');
-            if (!authHeader) {
-                return c.json({ error: 'Unauthorized' }, 401);
-            }
-
-            const token = authHeader.startsWith('Bearer ')
-                ? authHeader.substring(7)
-                : authHeader;
-
-            if (token !== secret) {
-                return c.json({ error: 'Unauthorized' }, 401);
-            }
-
-            return next();
-        };
-
-        // CRUD REST endpoints made available to all of our tables
-        // Public READ-ONLY mirror for the HTML viewer (no auth, GET only)
-        app.get('/public/rest/*', handleRest);
-
-        // Protected endpoints (require Bearer token)
-        app.all('/rest/*', authMiddleware, handleRest);
-
-        // Execute a raw SQL statement with parameters with this route
-        app.post('/query', authMiddleware, async (c: Context<{ Bindings: Env }>) => {
-            try {
-                const body = await c.req.json();
-                const { query, params } = body;
-
-                if (!query) {
-                    return c.json({ error: 'Query is required' }, 400);
-                }
-
-                // Execute the query against D1 database
-                const results = await env.DB.prepare(query)
-                    .bind(...(params || []))
-                    .all();
-
-                return c.json(results);
-            } catch (error: any) {
-                return c.json({ error: error.message }, 500);
-            }
-        });
-
-        // Public endpoint to serve themes (no Authorization header required)
-        app.get('/public/themes', async (c: Context<{ Bindings: Env }>) => {
-            return c.json(themes);
-        });
-
-        // Public endpoint to submit QCM results (no Authorization header required)
-        app.post('/public/qcm', async (c: Context<{ Bindings: Env }>) => {
-            try {
-                // Optional lightweight origin check (best-effort)
-                const origin = c.req.header('Origin') || '';
-                const url = new URL(c.req.url);
-                if (origin && origin !== `${url.protocol}//${url.host}`) {
-                    return c.json({ error: 'Forbidden origin' }, 403);
-                }
-
-                const body = await c.req.json();
-                if (!body || typeof body !== 'object') {
-                    return c.json({ error: 'Invalid JSON body' }, 400);
-                }
-
-                // Whitelist expected fields
-                const session_id = String(body.session_id || '').slice(0, 128);
-                const started_at = body.started_at ? String(body.started_at) : null;
-                const completed_at = body.completed_at ? String(body.completed_at) : null;
-                const num_themes = Number.isFinite(Number(body.num_themes)) ? Number(body.num_themes) : null;
-                const num_questions_total = Number.isFinite(Number(body.num_questions_total)) ? Number(body.num_questions_total) : null;
-                const num_correct_total = Number.isFinite(Number(body.num_correct_total)) ? Number(body.num_correct_total) : null;
-                const themes = Array.isArray(body.themes) ? JSON.stringify(body.themes) : null;
-
-                if (!session_id || !completed_at) {
-                    return c.json({ error: 'Missing required fields: session_id, completed_at' }, 400);
-                }
-
-                const sql = `INSERT INTO quiz_sessions
-                    (session_id, started_at, completed_at, num_themes, num_questions_total, num_correct_total, themes)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-                await c.env.DB.prepare(sql)
-                    .bind(
-                        session_id,
-                        started_at,
-                        completed_at,
-                        num_themes,
-                        num_questions_total,
-                        num_correct_total,
-                        themes,
-                    )
-                    .run();
-
-                return c.json({ ok: true }, 201);
-            } catch (error: any) {
-                return c.json({ error: error.message || String(error) }, 500);
-            }
-        });
-
-        // Static assets and default route
-        app.get('/', (c: Context) => c.redirect('/viewer.html', 302));
-
-        return app.fetch(request, env, ctx);
+    async fetch(request: Request, env: Env): Promise<Response> {
+      const url = new URL(request.url);
+  
+      // CORS
+      const origin = request.headers.get("Origin") || "*";
+      const cors = {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      };
+  
+      // Préflight CORS
+      if (request.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: cors });
+      }
+  
+      // POST /rest/scores
+      if (url.pathname === "/rest/scores" && request.method === "POST") {
+        try {
+          const body = await request.json();
+          const { external_id, session, theme_code, score, max_score } = body as { external_id: string, session: string, theme_code: string, score: number, max_score: number };
+  
+          if (!external_id || !theme_code || !(max_score > 0) || !(score >= 0)) {
+            return json({ error: "Champs invalides" }, 400, cors);
+          }
+  
+          // Schéma
+          await env.DB.exec(`CREATE TABLE IF NOT EXISTS students (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            external_id TEXT UNIQUE
+          )`);
+  
+          await env.DB.exec(`CREATE TABLE IF NOT EXISTS sujet (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session TEXT NOT NULL,
+            theme TEXT NOT NULL,
+            UNIQUE(session, theme)
+          )`);
+  
+          await env.DB.exec(`CREATE TABLE IF NOT EXISTS student_theme_scores (
+            student_id INTEGER NOT NULL,
+            theme_id INTEGER NOT NULL,
+            score INTEGER NOT NULL,
+            max_score INTEGER NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (student_id, theme_id)
+          )`);
+  
+          // Référentiels
+          await env.DB.prepare(
+            `INSERT OR IGNORE INTO students(external_id) VALUES (?)`
+          ).bind(external_id).run();
+  
+          await env.DB.prepare(
+            `INSERT OR IGNORE INTO sujet(session, theme) VALUES (?, ?)`
+          ).bind(session, theme_code).run();
+  
+          // IDs
+          const s = await env.DB.prepare(
+            `SELECT id FROM students WHERE external_id=?`
+          ).bind(external_id).first();
+  
+          const t = await env.DB.prepare(
+            `SELECT id FROM sujet WHERE session=? AND theme=?`
+          ).bind(session, theme_code).first();
+  
+          // UPSERT
+          await env.DB.prepare(
+            `INSERT INTO student_theme_scores (student_id, theme_id, score, max_score, updated_at)
+             VALUES (?, ?, ?, ?, datetime('now'))
+             ON CONFLICT(student_id, theme_id) DO UPDATE SET
+               score = excluded.score,
+               max_score = excluded.max_score,
+               updated_at = datetime('now')`
+          ).bind(s?.id, t?.id, score, max_score).run();
+  
+          return json({ ok: true, external_id, theme_code, score, max_score }, 200, cors);
+  
+        } catch (e: any) {
+          return json({ error: e.message }, 500, cors);
+        }
+      }
+  
+      // GET /rest/scores
+      if (url.pathname === "/rest/scores" && request.method === "GET") {
+        return json({ ok: true, ping: "pong" }, 200, cors);
+      }
+  
+      return new Response("Not found", { status: 404, headers: cors });
     }
-} satisfies ExportedHandler<Env>;
+  };
+  
+  // Helper JSON
+  function json(data: any, status = 200, headers = {}) {
+    return new Response(JSON.stringify(data), {
+      status,
+      headers: { "Content-Type": "application/json", ...headers }
+    });
+  }  
