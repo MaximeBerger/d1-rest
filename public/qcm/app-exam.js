@@ -216,7 +216,7 @@ let success = 0;
 let transitioning = false;
 let t0 = 0;
 const duration = 450;
-const autoAdvanceDelay = 700;
+const autoAdvanceDelay = 350;
 let pendingNextIndex = null;
 let locked = false;
 
