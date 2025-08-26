@@ -42,7 +42,7 @@
     // 👉 Adapte ce chemin si ton Worker expose un autre endpoint que /rest/{table}
     function buildUrl(base, table) {
       base = base.replace(/\/+$/, "");
-      return `${base}/rest/${encodeURIComponent(table)}`;
+      return `${base}`;
     }
 
     async function fetchRows() {
@@ -52,10 +52,10 @@
       const result = document.getElementById("result");
       result.innerHTML = "";
 
-      if (!base || !table) {
-        status.innerHTML = '<span class="error">Renseigne l’URL du Worker et le nom de la table.</span>';
-        return;
-      }
+      // if (!base || !table) {
+      //   status.innerHTML = '<span class="error">Renseigne l’URL du Worker et le nom de la table.</span>';
+      //   return;
+      // }
 
       status.textContent = "Chargement...";
       try {

@@ -115,6 +115,7 @@
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
       const external_id = document.getElementById('external_id').value.trim();
+      const session     = "Positionnement";
       const theme_code  = document.getElementById('theme_code').value.trim();
       const score       = parseFloat(document.getElementById('score').value);
       const max_score   = parseFloat(document.getElementById('max_score').value);
@@ -126,7 +127,7 @@
       const API_ENDPOINT = endpointInput.value.trim() || '/api/scores';
       localStorage.setItem('api_endpoint', API_ENDPOINT);
 
-      const payload = { external_id, theme_code, score, max_score };
+      const payload = { external_id, session, theme_code, score, max_score };
 
       try{
         btn.disabled = true; btn.textContent = 'Enregistrement…';
