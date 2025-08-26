@@ -1,0 +1,157 @@
+{
+  "themes": [
+    {
+      "id": "fractions",
+      "label": "Fractions",
+      "questions": [
+        {
+          "question": "Simplifie $\\dfrac{6}{8}$ :",
+          "answers": [
+            { "text": "$\\dfrac{3}{4}$", "correct": true },
+            { "text": "$\\dfrac{6}{8}$", "correct": false, "remediation": "Le numérateur et le dénominateur sont pairs tous les deux donc on peut les diviser par 2." },
+            { "text": "$\\dfrac{2}{3}$", "correct": false, "remediation": "Tu as divisé $6$ par $3$ pour obtenir $2$, mais le dénominateur devrait aussi être divisé par $3$." },
+            { "text": "$\\dfrac{4}{3}$", "correct": false, "remediation": "Tu as inversé le numérateur et le dénominateur." }
+          ]
+        },
+        {
+          "question": "Calcule $\\dfrac{3}{5}+\\dfrac{1}{10}$ :",
+          "answers": [
+            { "text": "$\\dfrac{7}{10}$", "correct": true },
+            { "text": "$\\dfrac{4}{15}$", "correct": false, "remediation": "Prends un dénominateur commun 10 : $3/5 = 6/10$." },
+            { "text": "$\\dfrac{2}{5}$", "correct": false, "remediation": "$6/10 + 1/10 = 7/10$." },
+            { "text": "$1$", "correct": false, "remediation": "La somme est inférieure à 1." }
+          ]
+        },
+        {
+          "question": "Calcule $\\dfrac{4}{9} - \\dfrac{1}{6}$ :",
+          "answers": [
+            { "text": "$\\dfrac{5}{18}$", "correct": true },
+            { "text": "$\\dfrac{1}{18}$", "correct": false, "remediation": "Utilise le PPCM 18 : $4/9 = 8/18$ et $1/6 = 3/18$." },
+            { "text": "$\\dfrac{7}{18}$", "correct": false, "remediation": "$8/18 - 3/18 = 5/18$." },
+            { "text": "$\\dfrac{5}{9}$", "correct": false, "remediation": "Erreur de dénominateur commun." }
+          ]
+        },
+        {
+          "question": "Calcule $\\dfrac{2}{3} \\times \\dfrac{9}{4}$ :",
+          "answers": [
+            { "text": "$\\dfrac{3}{2}$", "correct": true },
+            { "text": "$\\dfrac{18}{12}$", "correct": false, "remediation": "Tu peux simplifier par 3 avant de multiplier : $2/3 \\times 9/4 = 2/1 \\times 3/4 = 6/4 = 3/2$." },
+            { "text": "$\\dfrac{1}{6}$", "correct": false, "remediation": "Confusion entre multiplication et division." },
+            { "text": "$2$", "correct": false, "remediation": "Vérifie la simplification finale: $6/4 = 3/2$." }
+          ]
+        },
+        {
+          "question": "Calcule $\\dfrac{5}{6} \\div \\dfrac{5}{12}$ :",
+          "answers": [
+            { "text": "$2$", "correct": true },
+            { "text": "$\\dfrac{1}{2}$", "correct": false, "remediation": "Diviser par une fraction revient à multiplier par son inverse: $5/6 \\times 12/5 = 2$." },
+            { "text": "$\\dfrac{25}{72}$", "correct": false, "remediation": "Tu as multiplié au lieu d'inverser puis multiplier." },
+            { "text": "$\\dfrac{12}{5}$", "correct": false, "remediation": "C'est l'inverse du résultat attendu." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "puissances",
+      "label": "Puissances",
+      "questions": [
+        {
+          "question": "Calcule $2^3 \\times 2^4$ :",
+          "answers": [
+            { "text": "$2^7$", "correct": true },
+            { "text": "$2^{12}$", "correct": false, "remediation": "Additionne les exposants pour un produit de même base: $3+4=7$." },
+            { "text": "$2^1$", "correct": false, "remediation": "Tu as soustrait au lieu d'additionner." },
+            { "text": "$7^2$", "correct": false, "remediation": "On ne multiplie pas la base ici." }
+          ]
+        },
+        {
+          "question": "Calcule $5^6 \\div 5^2$ :",
+          "answers": [
+            { "text": "$5^4$", "correct": true },
+            { "text": "$5^8$", "correct": false, "remediation": "Soustrais les exposants pour un quotient de même base: $6-2=4$." },
+            { "text": "$5^3$", "correct": false, "remediation": "Erreur de soustraction: $6-2=4$." },
+            { "text": "$25$", "correct": false, "remediation": "Forme puissance attendue." }
+          ]
+        },
+        {
+          "question": "Calcule $(3^2)^4$ :",
+          "answers": [
+            { "text": "$3^8$", "correct": true },
+            { "text": "$3^6$", "correct": false, "remediation": "Produit de puissances: multiplie les exposants: $2\\times4=8$." },
+            { "text": "$9^4$", "correct": false, "remediation": "Réécriture correcte mais la forme canonique est $3^8$." },
+            { "text": "$12$", "correct": false, "remediation": "Ceci n'est pas une puissance de 3." }
+          ]
+        },
+        {
+          "question": "Calcule $10^3 \\times 10^{-5}$ :",
+          "answers": [
+            { "text": "$10^{-2}$", "correct": true },
+            { "text": "$10^8$", "correct": false, "remediation": "Additionne: $3+(-5)=-2$." },
+            { "text": "$10^2$", "correct": false, "remediation": "Le résultat est une puissance négative." },
+            { "text": "$10^{-8}$", "correct": false, "remediation": "Erreur de signe dans la somme des exposants." }
+          ]
+        },
+        {
+          "question": "Calcule $\\dfrac{2^5}{2^{-1}}$ :",
+          "answers": [
+            { "text": "$2^6$", "correct": true },
+            { "text": "$2^4$", "correct": false, "remediation": "$5-(-1)=6$." },
+            { "text": "$2^{-6}$", "correct": false, "remediation": "Attention au signe: soustraire un négatif équivaut à ajouter." },
+            { "text": "$2^{-4}$", "correct": false, "remediation": "Même remarque: $5-(-1)=6$." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "exponentielle",
+      "label": "Exponentielle",
+      "questions": [
+        {
+          "question": "La dérivée de $e^{2x}$ est :",
+          "answers": [
+            { "text": "$2e^{2x}$", "correct": true },
+            { "text": "$e^{2x}$", "correct": false, "remediation": "Chaîne: dérivée de $2x$ vaut 2, donc $2e^{2x}$." },
+            { "text": "$2x e^{2x}$", "correct": false, "remediation": "Ce n'est pas une dérivation de produit." },
+            { "text": "$e^{x}$", "correct": false, "remediation": "Exposant incorrect." }
+          ]
+        },
+        {
+          "question": "Résous $e^{x}=1$ :",
+          "answers": [
+            { "text": "$x=0$", "correct": true },
+            { "text": "$x=1$", "correct": false, "remediation": "$e^0=1$." },
+            { "text": "$x=\\ln(1)$", "correct": false, "remediation": "C'est 0, donc $x=0$." },
+            { "text": "Aucune solution", "correct": false, "remediation": "$e^x$ est toujours positif et vaut 1 en 0." }
+          ]
+        },
+        {
+          "question": "La solution de $e^{x}=5$ est :",
+          "answers": [
+            { "text": "$x=\\ln(5)$", "correct": true },
+            { "text": "$x=5$", "correct": false, "remediation": "Applique $\\ln$ des deux côtés." },
+            { "text": "$x=\\dfrac{1}{5}$", "correct": false, "remediation": "Confusion: on utilise le logarithme." },
+            { "text": "$x=5e$", "correct": false, "remediation": "Mauvaise manipulation." }
+          ]
+        },
+        {
+          "question": "Calcule $e^x \\cdot e^{3x}$ :",
+          "answers": [
+            { "text": "$e^{4x}$", "correct": true },
+            { "text": "$e^{3x}$", "correct": false, "remediation": "Additionne les exposants: $x+3x=4x$." },
+            { "text": "$e^{x}$", "correct": false, "remediation": "Addition manquante." },
+            { "text": "$e^{x^4}$", "correct": false, "remediation": "Ce n'est pas $x^4$ dans l'exposant." }
+          ]
+        },
+        {
+          "question": "Calcule $\\dfrac{e^{2x}}{e^{x}}$ :",
+          "answers": [
+            { "text": "$e^{x}$", "correct": true },
+            { "text": "$e^{3x}$", "correct": false, "remediation": "Soustrais les exposants: $2x - x = x$." },
+            { "text": "$x e^{x}$", "correct": false, "remediation": "Pas de facteur $x$ ici." },
+            { "text": "$e^{2x}$", "correct": false, "remediation": "Manque la soustraction des exposants." }
+          ]
+        }
+      ]
+    }
+  ]
+}
