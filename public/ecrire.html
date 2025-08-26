@@ -132,7 +132,6 @@
       try{
         btn.disabled = true; btn.textContent = 'Enregistrement…';
         const res = await fetch(API_ENDPOINT, {
-          Authorization: 'Bearer',
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

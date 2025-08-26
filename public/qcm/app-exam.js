@@ -89,16 +89,7 @@ window.renderThemesPanel = function() {
     const name = document.createElement('span');
     name.textContent = t.label;
     name.style.textDecoration = t.done ? 'line-through' : 'none';
-    const score = document.createElement('span');
-    score.textContent = t.score ? t.score : '';
-    score.style.marginLeft = '12px';
-    score.style.fontWeight = '700';
-    score.style.color = '#111827';
-    score.style.minWidth = '48px';
-    score.style.textAlign = 'right';
-    score.style.textDecoration = 'none';
     item.appendChild(name);
-    item.appendChild(score);
     list.appendChild(item);
   }
   if (window.panel.lastElementChild !== section) window.panel.appendChild(section);
@@ -120,7 +111,7 @@ window.startTheme = function(themeId) {
   window.renderThemesPanel();
 }
 
-window.endTheme = function() {
+window.endTheme = async function() {
   if (!window.state.current) return;
   // Marque le thème comme fait et détruit l'engine
   const idx = window.state.themes.findIndex(t => t.id === window.state.current.id);
@@ -128,6 +119,42 @@ window.endTheme = function() {
     window.state.themes[idx].done = true;
     // Enregistre le score final du thème
     window.state.themes[idx].score = `${success}/${window.state.current.engine.total}`;
+    
+    // Affichage dans la console du nom de l'étudiant, du thème et du score
+    const studentName = document.getElementById('studentName')?.value || 'Étudiant non identifié';
+    const themeName = window.state.current.label;
+    const finalScore = `${success}/${window.state.current.engine.total}`;
+    console.log(`Étudiant: ${studentName} | Thème: ${themeName} | Score: ${finalScore}`);
+
+    const payload = {
+      external_id: studentName,
+      session: "Positionnement - BMC1 - Dijon",
+      theme_code: themeName,
+      score: finalScore,
+      max_score: 5
+    }
+    try{
+      const res = await fetch('/rest/scores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json().catch(()=> ({}));
+
+      if(!res.ok){
+        const msg = data?.error || res.status + ' ' + res.statusText;
+        console.log('Erreur: ' + msg);
+      } else {
+        const pct = (finalScore.split('/')[0]/5*100).toFixed(2);
+        console.log(`OK — ${studentName} · ${themeName} = ${finalScore} (${pct}%)`);
+      }
+    } catch (err){
+      console.error('Erreur réseau:', err.message);
+    }
+
+
+
   }
   window.state.current = null;
   window.renderThemesHome();
@@ -192,14 +219,11 @@ const duration = 450;
 const autoAdvanceDelay = 700;
 let pendingNextIndex = null;
 let locked = false;
-let modalOpen = false;
 
 function refreshStats() {
   if (!window.state.current) return;
   window.statIndex.textContent = String(qIndex + 1);
   window.statTotal.textContent = String(window.state.current.engine.total);
-  window.statTries.textContent = String(tries);
-  window.statErrors.textContent = String(errors);
 }
 
 function quizGet() {
@@ -246,7 +270,8 @@ function goToNextWithAnimation() {
   if (transitioning) return;
   const ni = nextIndex();
   if (ni === null) {
-    openModal(`<strong>Thème terminé.</strong><br/>Score : ${success}/${window.state.current.engine.total}.<br/><br/>Clique « Fermer » pour revenir aux thèmes.`, "Fin du thème", () => window.endTheme());
+    // Fin du thème sans modal
+    window.endTheme();
     return;
   }
   nextCards = quizPrepare(ni);
@@ -312,7 +337,7 @@ window.__themeQuiz = {
       let bg = p.color(255), border = p.color(229), txt = p.color(31,41,55);
       
       // Effet de survol amélioré
-      const mouseOver = p.mouseX >= c.x && p.mouseX <= c.x + c.w && p.mouseY >= c.y && p.mouseY <= c.y + c.h && !modalOpen;
+      const mouseOver = p.mouseX >= c.x && p.mouseX <= c.x + c.w && p.mouseY >= c.y && p.mouseY <= c.y + c.h;
       if (mouseOver && c.state === 'idle') {
         bg = p.color(240, 249, 255); // Fond bleu très clair au survol
         border = p.color(59, 130, 246); // Bordure bleue
@@ -335,8 +360,12 @@ window.__themeQuiz = {
         p.drawingContext.shadowOffsetY = 0;
       }
       
-      if (c.state === 'wrong') { bg = p.color(254,242,242); border = p.color(252,165,165); txt = p.color(153,27,27); }
-      if (c.state === 'right') { bg = p.color(240,253,244); border = p.color(134,239,172); txt = p.color(22,101,52); }
+      // Une seule couleur bleue neutre pour les réponses cliquées (vraies ou fausses)
+      if (c.state === 'wrong' || c.state === 'right') { 
+        bg = p.color(100, 149, 237); 
+        border = p.color(100, 149, 237); 
+        txt = p.color(255); 
+      }
       
       p.noStroke(); p.fill(bg); p.rect(c.x, c.y, c.w, c.h, 10);
       p.stroke(border); p.noFill(); p.rect(c.x, c.y, c.w, c.h, 10);
@@ -348,7 +377,7 @@ window.__themeQuiz = {
     }
   },
   mousePressed: (p, mx, my) => {
-    if (locked || transitioning || modalOpen || !window.state.current) return;
+    if (locked || transitioning || !window.state.current) return;
     const i = (() => { for (let k=0;k<cards.length;k++){ const c=cards[k]; if (mx>=c.x && mx<=c.x+c.w && my>=c.y && my<=c.y+c.h) return k; } return -1; })();
     if (i === -1) return;
     tries++;
@@ -359,20 +388,18 @@ window.__themeQuiz = {
       success++;
       refreshStats();
       setTimeout(goToNextWithAnimation, autoAdvanceDelay);
-    } else {
-      c.state = 'wrong';
-      openModal(c.remediation || "Ce n'est pas la bonne réponse.");
-      const revert = () => { if (!c.correct) c.state = 'idle'; window.btnClose.removeEventListener('click', revert); window.overlay.removeEventListener('click', edge); };
-      const edge = (e) => { if (e.target === window.overlay) revert(); };
-      window.btnClose.addEventListener('click', revert); window.overlay.addEventListener('click', edge);
-      errors++;
-      refreshStats();
-    }
+         } else {
+       c.state = 'wrong';
+       locked = true;
+       errors++;
+       refreshStats();
+       setTimeout(goToNextWithAnimation, autoAdvanceDelay);
+     }
   },
   
   mouseMoved: (p, mx, my) => {
     // Gérer le curseur au survol des cartes
-    if (locked || transitioning || modalOpen || !window.state.current) {
+    if (locked || transitioning || !window.state.current) {
       p.cursor(p.ARROW);
       return;
     }
@@ -407,23 +434,6 @@ function layoutCards() {
     for (const c of nextCards) { c.x = x; c.y = y2; c.w = Wc; c.h = Hc; y2 += Hc + gap; }
   }
   renderAnswersGroups(cards, nextCards);
-}
-
-// Modale
-function openModal(html, title="Remédiation", onClose=null) {
-  document.getElementById('modalTitle').textContent = title;
-  window.modalBody.innerHTML = html;
-  window.overlay.style.display = 'flex';
-  window.overlay.setAttribute('aria-hidden', 'false');
-  modalOpen = true;
-  if (window.MathJax?.typesetPromise) MathJax.typesetPromise([window.modalBody]);
-  const close = () => {
-    window.overlay.style.display = 'none'; window.overlay.setAttribute('aria-hidden','true'); window.modalBody.innerHTML=''; modalOpen = false;
-    window.btnClose.removeEventListener('click', close); window.overlay.removeEventListener('click', edge);
-    if (onClose) onClose();
-  };
-  const edge = (e) => { if (e.target === window.overlay) close(); };
-  window.btnClose.addEventListener('click', close); window.overlay.addEventListener('click', edge);
 }
 
 // Brancher boutons

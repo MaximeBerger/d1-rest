@@ -109,9 +109,9 @@
 <body>
   <div class="page">
     <div class="title-container">
-      <h1 id="examTitle">Examen - Questions à choix multiples</h1>
+      <h1 id="examTitle">Examen - Positionnement</h1>
       <div style="margin-top: 16px; display: flex; align-items: center; gap: 12px;">
-        <label for="studentName" style="font-size: 14px; color: #6b7280; font-weight: 500;">Nom de l'étudiant :</label>
+        <label for="studentName" style="font-size: 14px; color: #6b7280; font-weight: 500;">Votre nom :</label>
         <input 
           id="studentName" 
           type="text" 
@@ -126,9 +126,23 @@
           "
           required
         />
+        <button 
+          id="btnStart" 
+          class="btn" 
+          style="
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            opacity: 0.5;
+            cursor: not-allowed;
+          "
+          disabled
+        >
+          Commencer
+        </button>
       </div>
     </div>
-    <div class="content">
+    <div class="content" id="mainContent" style="display: none;">
       <div id="container">
         <div id="modalOverlay" class="modal-backdrop" aria-hidden="true">
           <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -157,30 +171,21 @@
               <div class="stat-label">Question</div>
               <div class="stat-value"><span id="statIndex">1</span>/<span id="statTotal">1</span></div>
             </div>
-            <div class="stat">
-              <div class="stat-label">Tentatives (question)</div>
-              <div class="stat-value"><span id="statTries">0</span></div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Erreurs cumulées</div>
-              <div class="stat-value"><span id="statErrors">0</span></div>
-            </div>
+            
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script type="module" src="qcm/score-manager.js"></script>
-  <script type="module" src="qcm/app.js"></script>
   <script type="module">
     // Chargement des thèmes depuis le fichier JSON
     window.THEMES = [];
 
-    // Fonction pour charger les thèmes depuis l'API
+    // Fonction pour charger les thèmes depuis le fichier JSON
     async function loadThemes() {
       try {
-        const response = await fetch('/public/themes');
+        const response = await fetch('themes.json');
         const data = await response.json();
         window.THEMES = data.themes.map(theme => ({
           id: theme.id,
@@ -191,12 +196,7 @@
         // Initialiser l'état global après chargement
         window.state.themes = window.THEMES.map(t => ({ id: t.id, label: t.label, done: false, score: null }));
         
-        // Démarrer l'application après que le module soit chargé
-        setTimeout(() => {
-          if (window.renderThemesHome) {
-            window.renderThemesHome();
-          }
-        }, 100);
+        // L'application sera démarrée par le bouton "Commencer" une fois que l'étudiant aura saisi son nom
       } catch (error) {
         console.error('Erreur lors du chargement des thèmes:', error);
       }
@@ -222,23 +222,71 @@
     // Stats DOM existants
     window.statIndex = document.getElementById('statIndex');
     window.statTotal = document.getElementById('statTotal');
-    window.statTries = document.getElementById('statTries');
-    window.statErrors = document.getElementById('statErrors');
 
     // Modale existante
     window.overlay = document.getElementById('modalOverlay');
     window.modalBody = document.getElementById('modalBody');
     window.btnClose = document.getElementById('btnClose');
-    
-    // Initialiser le gestionnaire de scores
-    window.scoreManager = new ScoreManager();
-    
+
     // Démarrage: charge les thèmes puis affiche l'écran
     loadThemes();
     
     // Exposer la fonction renderThemesHome globalement pour qu'elle soit accessible depuis app.js
     window.renderThemesHome = null; // Sera définie dans app.js
+
+    // Gestion de la validation du nom d'étudiant
+    const studentNameInput = document.getElementById('studentName');
+    const btnStart = document.getElementById('btnStart');
+    const mainContent = document.getElementById('mainContent');
+
+    function validateStudentName() {
+      const name = studentNameInput.value.trim();
+      if (name.length >= 2) {
+        btnStart.disabled = false;
+        btnStart.style.opacity = '1';
+        btnStart.style.cursor = 'pointer';
+        btnStart.style.background = '#3b82f6';
+      } else {
+        btnStart.disabled = true;
+        btnStart.style.opacity = '0.5';
+        btnStart.style.cursor = 'not-allowed';
+      }
+    }
+
+    // Écouter les changements dans le champ nom
+    studentNameInput.addEventListener('input', validateStudentName);
+    studentNameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !btnStart.disabled) {
+        btnStart.click();
+      }
+    });
+
+    // Gérer le clic sur le bouton Commencer
+    btnStart.addEventListener('click', () => {
+      const name = studentNameInput.value.trim();
+      if (name.length >= 2) {
+        mainContent.style.display = 'flex';
+        studentNameInput.disabled = true;
+        btnStart.disabled = true;
+        btnStart.textContent = 'Commencer ✓';
+        btnStart.style.background = '#10b981';
+        btnStart.style.borderColor = '#10b981';
+        btnStart.style.opacity = '0.8';
+        btnStart.style.display = 'none';
+        
+        // Démarrer l'application après que le module soit chargé
+        setTimeout(() => {
+          if (window.renderThemesHome) {
+            window.renderThemesHome();
+          }
+        }, 100);
+      }
+    });
+
+    // Validation initiale
+    validateStudentName();
   </script>
+  <script type="module" src="qcm/app-exam.js"></script>
   <script>
     const sketch = (p) => {
       const W = 800, H = 600, margin = 24, headerH = 160;
