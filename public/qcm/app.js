@@ -30,31 +30,7 @@ window.renderThemesHome = function() {
   header.appendChild(hTitle);
   
   // Ajouter un bouton pour enregistrer tous les scores si des thèmes sont terminés
-  const completedThemes = window.state.themes.filter(t => t.done);
-  if (completedThemes.length > 0) {
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Enregistrer tous les scores';
-    saveButton.style.cssText = `
-      padding: 8px 16px;
-      background: #7aa2ff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-    `;
-    saveButton.addEventListener('click', async () => {
-      if (window.scoreManager) {
-        try {
-          await window.scoreManager.saveAllScores(window.state.themes);
-        } catch (error) {
-          console.error('Erreur lors de l\'enregistrement des scores:', error);
-        }
-      }
-    });
-    header.appendChild(saveButton);
-  }
+  
   const grid = document.createElement('div');
   grid.id = 'themesGrid';
   grid.style.cssText = 'display:flex; flex-direction:column; gap:16px; padding:16px; overflow:auto;';
@@ -211,7 +187,7 @@ function renderAnswersGroups(currentList, nextList = null) {
        div.style.color = '#1f2937';
        div.style.paddingLeft = '14px';
        div.style.pointerEvents = 'none'; // Permettre les clics sur le canvas
-      div.innerHTML = (c.id ? `<strong>${c.id} — </strong>` : '') + c.text;
+      div.innerHTML = (c.id ? `<strong style="margin-right:6px">${c.id} — </strong>` : '') + c.text;
       group.appendChild(div);
     }
     return group;
@@ -376,7 +352,7 @@ window.__themeQuiz = {
       
       // Effet de survol amélioré
       const mouseOver = p.mouseX >= c.x && p.mouseX <= c.x + c.w && p.mouseY >= c.y && p.mouseY <= c.y + c.h && !modalOpen;
-      if (mouseOver && c.state === 'idle') {
+      if (mouseOver && (c.state === 'idle' || c.state === 'clue')) {
         bg = p.color(240, 249, 255); // Fond bleu très clair au survol
         border = p.color(59, 130, 246); // Bordure bleue
         txt = p.color(30, 58, 138); // Texte bleu foncé
@@ -399,6 +375,7 @@ window.__themeQuiz = {
       }
       
       if (c.state === 'wrong') { bg = p.color(254,242,242); border = p.color(252,165,165); txt = p.color(153,27,27); }
+      if (c.state === 'clue') {  border = p.color(4,120,87); }
       if (c.state === 'right') { bg = p.color(240,253,244); border = p.color(134,239,172); txt = p.color(22,101,52); }
       
       p.noStroke(); p.fill(bg); p.rect(c.x, c.y, c.w, c.h, 10);
@@ -500,7 +477,7 @@ window.btnReset?.addEventListener('click', () => {
 
 window.btnReveal?.addEventListener('click', () => {
   if (!window.state.current) return;
-  for (const c of cards) c.state = c.correct ? 'right' : 'idle';
+  for (const c of cards) c.state = c.correct ? 'clue' : 'idle';
   // locked = true;
 });
 
