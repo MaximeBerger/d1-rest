@@ -245,19 +245,6 @@ window.showFinalResults = async function() {
           " onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
             Recommencer
           </button>
-          <button id="btnPrint" style="
-            background: #6b7280;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-          " onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
-            Imprimer
-          </button>
         </div>
       </div>
     `;
