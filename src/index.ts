@@ -94,6 +94,43 @@ export default {
       if (url.pathname === "/rest/scores" && request.method === "GET") {
         return json({ ok: true, ping: "pong" }, 200, cors);
       }
+
+      // GET /rest/scores/{external_id} - Récupérer tous les scores d'un étudiant
+      if (url.pathname.startsWith("/rest/scores/") && request.method === "GET") {
+        try {
+          const external_id = url.pathname.split("/rest/scores/")[1];
+          
+          if (!external_id) {
+            return json({ error: "ID étudiant manquant" }, 400, cors);
+          }
+
+          // Récupérer tous les scores de l'étudiant avec les détails des thèmes
+          const scores = await env.DB.prepare(`
+            SELECT 
+              s.external_id,
+              sts.score,
+              sts.max_score,
+              sts.updated_at,
+              suj.theme as theme_code,
+              suj.session
+            FROM students s
+            JOIN student_theme_scores sts ON s.id = sts.student_id
+            JOIN sujet suj ON sts.theme_id = suj.id
+            WHERE s.external_id = ?
+            ORDER BY sts.updated_at DESC
+          `).bind(external_id).all();
+
+          return json({ 
+            ok: true, 
+            external_id, 
+            scores: scores.results || [],
+            total_themes: scores.results?.length || 0
+          }, 200, cors);
+
+        } catch (e: any) {
+          return json({ error: e.message }, 500, cors);
+        }
+      }
   
       return new Response("Not found", { status: 404, headers: cors });
     }

@@ -5,7 +5,7 @@
       "label": "Calculs",
       "questions": [
         {
-          "question": "Simplifie $\\dfrac{12}{18}$ :",
+          "question": "Simplifier $\\dfrac{12}{18}$ :",
           "answers": [
             {
               "text": "$\\dfrac{2}{3}$",
@@ -29,7 +29,7 @@
           ]
         },
         {
-          "question": "Résous $x^2 - 5x + 6 = 0$ :",
+          "question": "Résoudre $x^2 - 5x + 6 = 0$ :",
           "answers": [
             {
               "text": "$x=2$ ou $x=3$",
@@ -53,7 +53,7 @@
           ]
         },
         {
-          "question": "Simplifie $\\dfrac{3}{x} + \\dfrac{5}{x}$ :",
+          "question": "Simplifier $\\dfrac{3}{x} + \\dfrac{5}{x}$ :",
           "answers": [
             {
               "text": "$\\dfrac{8}{x}$",
@@ -77,7 +77,7 @@
           ]
         },
         {
-          "question": "Résous $\\dfrac{2}{x} = 5$ :",
+          "question": "Résoudre $\\dfrac{2}{x} = 5$ :",
           "answers": [
             {
               "text": "$x=\\dfrac{2}{5}$",
@@ -101,7 +101,7 @@
           ]
         },
         {
-          "question": "Calcule $2^3 \\times 2^4$ :",
+          "question": "Calculer $2^3 \\times 2^4$ :",
           "answers": [
             {
               "text": "$2^7$",
@@ -125,7 +125,7 @@
           ]
         },
         {
-          "question": "Résous le système $\\begin{cases} 2x+y=5 \\\\ x-y=1 \\end{cases}$ :",
+          "question": "Résoudre le système $\\begin{cases} 2x+y=5 \\\\ x-y=1 \\end{cases}$ :",
           "answers": [
             {
               "text": "$x=2, y=1$",
@@ -149,7 +149,7 @@
           ]
         },
         {
-          "question": "Développe $(x+3)(x-3)$ :",
+          "question": "Développer $(x+3)(x-3)$ :",
           "answers": [
             {
               "text": "$x^2-9$",
@@ -173,7 +173,7 @@
           ]
         },
         {
-          "question": "Simplifie $\\dfrac{x^2}{x^5}$ (avec $x \\neq 0$) :",
+          "question": "Simplifier $\\dfrac{x^2}{x^5}$ (avec $x \\neq 0$) :",
           "answers": [
             {
               "text": "$\\dfrac{1}{x^3}$",
@@ -197,7 +197,7 @@
           ]
         },
         {
-          "question": "Résous $x^2=16$ :",
+          "question": "Résoudre $x^2=16$ :",
           "answers": [
             {
               "text": "$x=4$ ou $x=-4$",
@@ -221,7 +221,7 @@
           ]
         },
         {
-          "question": "Résous $\\dfrac{x+1}{x} = 2$ :",
+          "question": "Résoudre $\\dfrac{x+1}{x} = 2$ :",
           "answers": [
             {
               "text": "$x=1$",
@@ -251,7 +251,7 @@
       "label": "Fonctions",
       "questions": [
         {
-          "question": "Donne l’ensemble de définition de $f(x)=\\dfrac{1}{x-2}$ :",
+          "question": "Donner l’ensemble de définition de $f(x)=\\dfrac{1}{x-2}$ :",
           "answers": [
             {
               "text": "$\\mathbb{R} \\setminus \\{2\\}$",
@@ -275,7 +275,7 @@
           ]
         },
         {
-          "question": "Soit $f(x)=x^2-4x+3$. Son tableau de variations sur $\\mathbb{R}$ est :",
+          "question": "Soit $f(x)=x^2-4x+3$. Le tableau de variations de $f$ sur $\\mathbb{R}$ est :",
           "answers": [
             {
               "text": "Décroissante jusqu’en 2 puis croissante",
@@ -299,7 +299,7 @@
           ]
         },
         {
-          "question": "Soit $f(x)=\\sqrt{x}$. Son ensemble de définition est :",
+          "question": "Soit $f(x)=\\sqrt{x}$. L'ensemble de définition de $f$ est :",
           "answers": [
             {
               "text": "$[0,+\\infty[$",
@@ -323,7 +323,7 @@
           ]
         },
         {
-          "question": "Résous $|x|=5$ :",
+          "question": "Résoudre $|x|=5$ :",
           "answers": [
             {
               "text": "$x=5$ ou $x=-5$",
@@ -347,7 +347,7 @@
           ]
         },
         {
-          "question": "Résous $|x-3|=0$ :",
+          "question": "Résoudre $|x-3|=0$ :",
           "answers": [
             {
               "text": "$x=3$",
@@ -419,7 +419,7 @@
           ]
         },
         {
-          "question": "Soit $f(x)=x^2$. Son minimum sur $\\mathbb{R}$ est :",
+          "question": "Soit $f(x)=x^2$. Le minimum de $f$ sur $\\mathbb{R}$ est :",
           "answers": [
             {
               "text": "0",
@@ -467,7 +467,7 @@
           ]
         },
         {
-          "question": "Soit $f(x)=|x-2|$. Quel est son minimum et en quel point ?",
+          "question": "Soit $f(x)=|x-2|$. \n Quel est le minimum de $f$ et en quel point est-il atteint ?",
           "answers": [
             {
               "text": "Minimum 0 en $x=2$",
@@ -497,7 +497,7 @@
       "label": "Vecteurs",
       "questions": [
         {
-          "question": "Calcule le produit scalaire de $\\vec{u}(2,1)$ et $\\vec{v}(3,4)$ :",
+          "question": "Calculer le produit scalaire de $\\vec{u}(2,1)$ et $\\vec{v}(3,4)$ :",
           "answers": [
             {
               "text": "10",
@@ -521,7 +521,7 @@
           ]
         },
         {
-          "question": "Quelle est la norme de $\\vec{u}(3,4)$ ?",
+          "question": "Quelle est la norme du vecteur $\\vec{u}(3,4)$ ?",
           "answers": [
             {
               "text": "5",
@@ -545,24 +545,24 @@
           ]
         },
         {
-          "question": "Deux vecteurs sont colinéaires si :",
+          "question": "Deux vecteurs sont colinéaires si et seulement si :",
           "answers": [
             {
               "text": "L’un est un multiple de l’autre",
               "correct": true
             },
             {
-              "text": "Leur norme est égale",
+              "text": "Leur norme sont égales",
               "correct": false,
               "remediation": "Deux vecteurs de même longueur ne sont pas forcément colinéaires (ex : $\\vec{i}$ et $\\vec{j}$)."
             },
             {
-              "text": "Ils sont perpendiculaires",
+              "text": "Ils sont orthogonaux",
               "correct": false,
               "remediation": "Perpendiculaire signifie produit scalaire nul, pas colinéarité."
             },
             {
-              "text": "Leur produit scalaire vaut 1",
+              "text": "Leur produit scalaire est égal à 1",
               "correct": false,
               "remediation": "Le produit scalaire dépend de l’angle et des normes, pas uniquement de la colinéarité."
             }
@@ -617,7 +617,7 @@
           ]
         },
         {
-          "question": "Calcule $\\vec{u}\\cdot \\vec{v}$ avec $\\vec{u}=(1,-1)$ et $\\vec{v}=(-2,2)$ :",
+          "question": "Calculer $\\vec{u}\\cdot \\vec{v}$ avec $\\vec{u}=(1,-1)$ et $\\vec{v}=(-2,2)$ :",
           "answers": [
             {
               "text": "-4",
@@ -641,7 +641,7 @@
           ]
         },
         {
-          "question": "Quelle est la norme de $\\vec{u}=(0,5)$ ?",
+          "question": "Quelle est la norme du vecteur $\\vec{u}=(0,5)$ ?",
           "answers": [
             {
               "text": "5",
@@ -665,7 +665,7 @@
           ]
         },
         {
-          "question": "Si $||\\vec{u}||\\,||\\vec{v}||\\neq 0$ et $\\vec{u}\\cdot\\vec{v}=0$, alors :",
+          "question": "Si $\\|\\vec{u}\\|\\|\\vec{v}\\|\neq 0$ et $\\vec{u}\\cdot\\vec{v}=0$, alors :",
           "answers": [
             {
               "text": "$\\vec{u}$ et $\\vec{v}$ sont perpendiculaires",
@@ -689,7 +689,7 @@
           ]
         },
         {
-          "question": "Donne une équation cartésienne de la droite passant par $(0,1)$ et de vecteur directeur $(2,3)$ :",
+          "question": "Donner une équation cartésienne de la droite passant par $(0,1)$ et de vecteur directeur $(2,3)$ :",
           "answers": [
             {
               "text": "3x - 2y + 2 = 0",
@@ -713,7 +713,7 @@
           ]
         },
         {
-          "question": "Si $||\\vec{u}||=1$, on dit que :",
+          "question": "Si $\\|\\vec{u}\\|=1$, on dit que :",
           "answers": [
             {
               "text": "$\\vec{u}$ est un vecteur unitaire",
@@ -989,7 +989,7 @@
       "label": "Suites numériques",
       "questions": [
         {
-          "question": "Soit la suite arithmétique définie par $u_0=2$ et raison $r=3$. Quelle est l’expression de $u_n$ ?",
+          "question": "Soit la suite arithmétique définie par $u_0=2$ et raison $r=3$. \n Quelle est l’expression de $u_n$ ?",
           "answers": [
             {
               "text": "$u_n=2+3n$",
@@ -1085,7 +1085,7 @@
           ]
         },
         {
-          "question": "Soit une suite arithmétique de raison $r=5$. On sait que $u_3=20$. Que vaut $u_0$ ?",
+          "question": "Soit une suite arithmétique de raison $r=5$. \n On sait que $u_3=20$. Que vaut $u_0$ ?",
           "answers": [
             {
               "text": "5",
@@ -1109,7 +1109,7 @@
           ]
         },
         {
-          "question": "Soit une suite géométrique de raison $q=3$. On sait que $u_2=27$. Que vaut $u_0$ ?",
+          "question": "Soit une suite géométrique de raison $q=3$. \n On sait que $u_2=27$. Que vaut $u_0$ ?",
           "answers": [
             {
               "text": "3",
@@ -1133,7 +1133,7 @@
           ]
         },
         {
-          "question": "On définit une suite par récurrence : $u_0=1$, $u_{n+1}=u_n+2$. Quelle est la nature de la suite ?",
+          "question": "On définit une suite par récurrence : $u_0=1$, $u_{n+1}=u_n+2$. \n Quelle est la nature de la suite ?",
           "answers": [
             {
               "text": "Arithmétique, de raison 2",
@@ -1157,7 +1157,7 @@
           ]
         },
         {
-          "question": "On définit une suite par récurrence : $u_0=2$, $u_{n+1}=3u_n$. Quelle est la nature de la suite ?",
+          "question": "On définit une suite par récurrence : $u_0=2$, $u_{n+1}=3u_n$. \n Quelle est la nature de la suite ?",
           "answers": [
             {
               "text": "Géométrique, de raison 3",

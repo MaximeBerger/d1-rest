@@ -95,6 +95,210 @@ window.renderThemesPanel = function() {
   if (window.panel.lastElementChild !== section) window.panel.appendChild(section);
 }
 
+// Fonction pour afficher les résultats finaux
+window.showFinalResults = async function() {
+  const studentName = document.getElementById('studentName')?.value || 'Étudiant non identifié';
+  
+  // Créer l'overlay des résultats finaux
+  let resultsOverlay = document.getElementById('finalResultsOverlay');
+  if (!resultsOverlay) {
+    resultsOverlay = document.createElement('div');
+    resultsOverlay.id = 'finalResultsOverlay';
+    resultsOverlay.style.position = 'absolute';
+    resultsOverlay.style.inset = '0';
+    resultsOverlay.style.background = '#fff';
+    resultsOverlay.style.borderRadius = '8px';
+    resultsOverlay.style.display = 'flex';
+    resultsOverlay.style.flexDirection = 'column';
+    resultsOverlay.style.overflow = 'auto';
+    window.container.appendChild(resultsOverlay);
+  }
+  
+  // Masquer les autres éléments
+  const canvas = window.container.querySelector('canvas');
+  if (canvas) canvas.style.display = 'none';
+  if (window.questionOverlay) window.questionOverlay.style.display = 'none';
+  if (window.answersOverlay) window.answersOverlay.style.display = 'none';
+  if (window.btnNext) window.btnNext.style.visibility = 'hidden';
+  
+  // Afficher un message de chargement
+  resultsOverlay.innerHTML = `
+    <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+      <div style="text-align: center;">
+        <div style="font-size: 18px; color: #6b7280; margin-bottom: 16px;">Chargement des résultats...</div>
+        <div style="width: 40px; height: 40px; border: 4px solid #e5e7eb; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+      </div>
+    </div>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  `;
+  
+  try {
+    // Récupérer tous les scores depuis l'API
+    const response = await fetch(`/rest/scores/${encodeURIComponent(studentName)}`);
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Erreur lors de la récupération des scores');
+    }
+    
+    const scores = data.scores || [];
+    
+    // Calculer les statistiques globales
+    const totalScore = scores.reduce((sum, s) => sum + s.score, 0);
+    const totalMaxScore = scores.reduce((sum, s) => sum + s.max_score, 0);
+    const globalPercentage = totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 100) : 0;
+    
+    // Déterminer le niveau global
+    let globalLevel = '';
+    let levelColor = '';
+    if (globalPercentage >= 80) {
+      globalLevel = 'Excellent';
+      levelColor = '#10b981';
+    } else if (globalPercentage >= 60) {
+      globalLevel = 'Bon';
+      levelColor = '#3b82f6';
+    } else if (globalPercentage >= 40) {
+      globalLevel = 'Moyen';
+      levelColor = '#f59e0b';
+    } else {
+      globalLevel = 'À améliorer';
+      levelColor = '#ef4444';
+    }
+    
+    // Générer le HTML des résultats
+    resultsOverlay.innerHTML = `
+      <div style="padding: 24px; max-width: 800px; margin: 0 auto; width: 100%;">
+        <!-- En-tête -->
+        <div style="text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #e5e7eb;">
+          <h1 style="font-size: 28px; font-weight: 700; color: #111827; margin: 0 0 8px 0;">Résultats du Positionnement</h1>
+          <p style="font-size: 16px; color: #6b7280; margin: 0;">Étudiant: <strong>${studentName}</strong></p>
+          <p style="font-size: 14px; color: #9ca3af; margin: 8px 0 0 0;">Session: Positionnement - BMC1 - Dijon</p>
+        </div>
+        
+        <!-- Résumé global -->
+        <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 16px; padding: 24px; margin-bottom: 32px; text-align: center;">
+          <div style="font-size: 14px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Score Global</div>
+          <div style="font-size: 48px; font-weight: 800; color: ${levelColor}; margin-bottom: 8px;">${globalPercentage}%</div>
+          <div style="font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 16px;">${globalLevel}</div>
+          <div style="font-size: 16px; color: #6b7280;">
+            ${totalScore} points sur ${totalMaxScore} (${scores.length} thème${scores.length > 1 ? 's' : ''})
+          </div>
+        </div>
+        
+        <!-- Détail par thème -->
+        <div style="margin-bottom: 32px;">
+          <h2 style="font-size: 20px; font-weight: 600; color: #111827; margin: 0 0 16px 0;">Détail par thème</h2>
+          <div style="display: grid; gap: 12px;">
+            ${scores.map(score => {
+              const percentage = Math.round((score.score / score.max_score) * 100);
+              let themeLevel = '';
+              let themeColor = '';
+              if (percentage >= 80) {
+                themeLevel = 'Excellent';
+                themeColor = '#10b981';
+              } else if (percentage >= 60) {
+                themeLevel = 'Bon';
+                themeColor = '#3b82f6';
+              } else if (percentage >= 40) {
+                themeLevel = 'Moyen';
+                themeColor = '#f59e0b';
+              } else {
+                themeLevel = 'À améliorer';
+                themeColor = '#ef4444';
+              }
+              
+              return `
+                <div style="background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 4px;">${score.theme_code}</div>
+                    <div style="font-size: 14px; color: #6b7280;">${score.score}/${score.max_score} points</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 18px; font-weight: 700; color: ${themeColor}; margin-bottom: 2px;">${percentage}%</div>
+                    <div style="font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">${themeLevel}</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div style="text-align: center; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+          <button id="btnRestart" style="
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-right: 12px;
+          " onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+            Recommencer
+          </button>
+          <button id="btnPrint" style="
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+          " onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#6b7280'">
+            Imprimer
+          </button>
+        </div>
+      </div>
+    `;
+    
+    // Ajouter les événements pour les boutons
+    document.getElementById('btnRestart')?.addEventListener('click', () => {
+      // Réinitialiser complètement la session
+      window.state.themes.forEach(t => t.done = false);
+      window.state.current = null;
+      success = 0; errors = 0; tries = 0;
+      
+      // Masquer les résultats et revenir à l'accueil
+      resultsOverlay.remove();
+      window.renderThemesHome();
+    });
+    
+    document.getElementById('btnPrint')?.addEventListener('click', () => {
+      window.print();
+    });
+    
+  } catch (error) {
+    console.error('Erreur lors du chargement des résultats:', error);
+    resultsOverlay.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+        <div style="text-align: center;">
+          <div style="font-size: 18px; color: #ef4444; margin-bottom: 16px;">Erreur lors du chargement des résultats</div>
+          <div style="font-size: 14px; color: #6b7280; margin-bottom: 24px;">${error.message}</div>
+          <button onclick="window.showFinalResults()" style="
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+          ">Réessayer</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
 window.startTheme = function(themeId) {
   if (window.state.current) return;
   const def = window.THEMES.find(t => t.id === themeId);
@@ -152,12 +356,16 @@ window.endTheme = async function() {
     } catch (err){
       console.error('Erreur réseau:', err.message);
     }
-
-
-
   }
   window.state.current = null;
-  window.renderThemesHome();
+  
+  // Vérifier si tous les thèmes sont terminés
+  const allThemesDone = window.state.themes.every(t => t.done);
+  if (allThemesDone) {
+    window.showFinalResults();
+  } else {
+    window.renderThemesHome();
+  }
 }
 
 // Gestion du cadre quiz (canvas + overlays)

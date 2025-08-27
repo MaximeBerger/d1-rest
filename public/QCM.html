@@ -98,6 +98,26 @@
     mjx-container:not([display="true"]) {
       margin: 0.1em 0.3em; /* espace avant et après dans la ligne */
     }
+
+    /* Styles pour l'impression */
+    @media print {
+      body { background: white !important; }
+      .page { padding: 0 !important; }
+      .title-container { display: none !important; }
+      #panel { display: none !important; }
+      #container { border: none !important; box-shadow: none !important; }
+      #finalResultsOverlay {
+        position: static !important;
+        background: white !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+      }
+      #finalResultsOverlay > div {
+        padding: 0 !important;
+        max-width: none !important;
+      }
+      button { display: none !important; }
+    }
   </style>
 
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
