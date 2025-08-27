@@ -3,7 +3,7 @@
 import { shuffleArray, labelizeAnswers, pickRandomQuestions } from "./utils.js";
 
 export class ThemeQuizEngine {
-  constructor(themeId, themeLabel, allQuestions, numQuestions = 5) {
+  constructor(themeId, themeLabel, allQuestions, numQuestions = 10) {
     this.themeId = themeId;
     this.themeLabel = themeLabel;
     this.allQuestions = allQuestions;
