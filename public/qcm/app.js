@@ -262,8 +262,29 @@ function refreshQuestionOverlay() {
   if (qEl) {
     // Utiliser l'index UI courant pour garantir la synchro avec l'animation
     const q = window.state.current.engine.questions[qIndex];
-    qEl.innerHTML = q ? q.question : '';
-    if (window.MathJax?.typesetPromise) MathJax.typesetPromise([qEl]);
+    qEl.innerHTML = '';
+    if (q && q.question != null) {
+      const container = document.createElement('div');
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+
+      const parts = Array.isArray(q.question)
+        ? q.question
+        : String(q.question).split('<br />');
+
+      for (const part of parts) {
+        const line = document.createElement('div');
+        line.style.display = 'block';
+        line.style.textAlign = 'center';
+        line.style.margin = '4px 0';
+        line.innerHTML = part;
+        container.appendChild(line);
+      }
+      qEl.appendChild(container);
+      if (window.MathJax?.typesetPromise) MathJax.typesetPromise([qEl]);
+    }
   }
 }
 

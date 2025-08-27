@@ -60,7 +60,7 @@
               "correct": true
             },
             {
-              "text": "$\\dfrac{3+5}{x^2}$",
+              "text": "$\\dfrac{8}{x^2}$",
               "correct": false,
               "remediation": "Attention, le dénominateur commun reste $x$, pas $x^2$."
             },
@@ -70,28 +70,28 @@
               "remediation": "Tu as multiplié les fractions au lieu de les additionner."
             },
             {
-              "text": "$\\dfrac{2}{x}$",
+              "text": "$\\dfrac{8}{2x}$",
               "correct": false,
-              "remediation": "Tu as soustrait au lieu d’additionner."
+              "remediation": "Les dénominateurs ne s'additionnent pas."
             }
           ]
         },
         {
-          "question": "Résoudre $\\dfrac{2}{x} = 5$ :",
+          "question": "Résoudre $\\dfrac{2}{x} = 5x$ :",
           "answers": [
             {
-              "text": "$x=\\dfrac{2}{5}$",
+              "text": "$x=\\sqrt{\\dfrac{2}{5}}$ ou $x=-\\sqrt{\\dfrac{2}{5}}$",
               "correct": true
             },
             {
-              "text": "$x=\\dfrac{5}{2}$",
+              "text": "$x=\\sqrt{\\dfrac{2}{5}}$ ou $x=\\sqrt{\\dfrac{5}{2}}$",
               "correct": false,
-              "remediation": "Multiplie des deux côtés par $x$ puis divise par 5 : on obtient $x=\\dfrac{2}{5}$."
+              "remediation": "Détaille bien l'étape intermédiaire."
             },
             {
-              "text": "$x=0{,}4$",
+              "text": "$x=\\sqrt{\\dfrac{5}{2}}$",
               "correct": false,
-              "remediation": "La valeur est correcte numériquement, mais on attend ici la forme fractionnaire $\\dfrac{2}{5}$ ; vérifie la méthode (multiplier par $x$ puis diviser par 5)."
+              "remediation": "Multiplie des deux côtés par $x$ puis divise par 5 : on obtient $x=\\dfrac{2}{5}$."
             },
             {
               "text": "Pas de solution",
@@ -101,14 +101,14 @@
           ]
         },
         {
-          "question": "Calculer $2^3 \\times 2^4$ :",
+          "question": "Calculer $2^3 \\times 2^4 / 2^2$ :",
           "answers": [
             {
-              "text": "$2^7$",
+              "text": "$2^5$",
               "correct": true
             },
             {
-              "text": "$2^{12}$",
+              "text": "$2^{6}$",
               "correct": false,
               "remediation": "On additionne les exposants quand on multiplie des puissances de même base, on ne les multiplie pas."
             },
@@ -118,9 +118,9 @@
               "remediation": "Tu as soustrait les exposants au lieu de les additionner."
             },
             {
-              "text": "$2^{24}$",
+              "text": "$2^{10}$",
               "correct": false,
-              "remediation": "Tu as élevé $2$ à la puissance $3\\times 4$ par erreur."
+              "remediation": "Les exposants s'additionnent ici."
             }
           ]
         },
@@ -149,16 +149,16 @@
           ]
         },
         {
-          "question": "Développer $(x+3)(x-3)$ :",
+          "question": "Développer $(x+3)(2x-3)$ :",
           "answers": [
             {
-              "text": "$x^2-9$",
+              "text": "$2x^2+3x-9$",
               "correct": true
             },
             {
-              "text": "$x^2+9$",
+              "text": "$2x^2-3x-9$",
               "correct": false,
-              "remediation": "Formule des identités remarquables : $(a+b)(a-b)=a^2-b^2$."
+              "remediation": "Attention au signe devant $x$ : l'opération est $2*3x -3x$."
             },
             {
               "text": "$x^2-6x+9$",
@@ -173,10 +173,10 @@
           ]
         },
         {
-          "question": "Simplifier $\\dfrac{x^2}{x^5}$ (avec $x \\neq 0$) :",
+          "question": "Simplifier $\\dfrac{x^2}{x^5} \\, (x^2)^{3}$ (avec $x \\neq 0$) :",
           "answers": [
             {
-              "text": "$\\dfrac{1}{x^3}$",
+              "text": "$x^3$",
               "correct": true
             },
             {
@@ -190,28 +190,26 @@
               "remediation": "Tu as additionné les exposants au lieu de les soustraire."
             },
             {
-              "text": "$x^3$",
+              "text": "$\\dfrac{1}{x^3}$",
               "correct": false,
               "remediation": "Attention, c’est $x^2 / x^5 = x^{2-5}=x^{-3}=1/x^3$."
             }
           ]
         },
         {
-          "question": "Résoudre $x^2=16$ :",
+          "question": "Résoudre $(x+1)^2=16$ :",
           "answers": [
             {
-              "text": "$x=4$ ou $x=-4$",
+              "text": "$x=3$ ou $x=-5$",
               "correct": true
             },
             {
-              "text": "$x=4$",
-              "correct": false,
-              "remediation": "Il y a deux solutions symétriques."
+              "text": "$x=4$ ou $x=-4$",
+              "correct": false
             },
             {
-              "text": "$x=-4$",
-              "correct": false,
-              "remediation": "Il manque la solution positive."
+              "text": "$x=-4$ ou $x=6$",
+              "correct": false
             },
             {
               "text": "Pas de solution",
@@ -275,7 +273,7 @@
           ]
         },
         {
-          "question": "Soit $f(x)=x^2-4x+3$. Le tableau de variations de $f$ sur $\\mathbb{R}$ est :",
+          "question": "Soit $f(x)=x^2-4x+3$. <br />Le tableau de variations de $f$ sur $\\mathbb{R}$ est :",
           "answers": [
             {
               "text": "Décroissante jusqu’en 2 puis croissante",
@@ -398,16 +396,16 @@
           "question": "Soit $f(x)=\\dfrac{1}{x}$. Quelle est sa limite en $0^+$ ?",
           "answers": [
             {
-              "text": "+\\infty",
+              "text": "$+\\infty$",
               "correct": true
             },
             {
-              "text": "-\\infty",
+              "text": "$-\\infty$",
               "correct": false,
               "remediation": "À droite de 0, $1/x$ est très grand positif."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "La fonction diverge près de 0, elle ne tend pas vers 0."
             },
@@ -422,16 +420,16 @@
           "question": "Soit $f(x)=x^2$. Le minimum de $f$ sur $\\mathbb{R}$ est :",
           "answers": [
             {
-              "text": "0",
+              "text": "$0$",
               "correct": true
             },
             {
-              "text": "-\\infty",
+              "text": "$-\\infty$",
               "correct": false,
               "remediation": "La parabole, tournée vers le haut, est toujours $\\ge 0$."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "On a $f(0)=0$, donc le minimum vaut 0."
             },
@@ -446,16 +444,16 @@
           "question": "Soit $f(x)=\\dfrac{1}{x^2}$. Que vaut $\\lim_{x\\to+\\infty} f(x)$ ?",
           "answers": [
             {
-              "text": "0",
+              "text": "$0$",
               "correct": true
             },
             {
-              "text": "+\\infty",
+              "text": "$+\\infty$",
               "correct": false,
               "remediation": "Quand $x$ croît, $1/x^2$ décroît vers 0."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "Tu as confondu limite à l’infini et valeur en 1."
             },
@@ -467,14 +465,14 @@
           ]
         },
         {
-          "question": "Soit $f(x)=|x-2|$. \n Quel est le minimum de $f$ et en quel point est-il atteint ?",
+          "question": "Soit $f(x)=|x-2|$. <br />Quel est le minimum de $f$ et en quel point est-il atteint ?",
           "answers": [
             {
-              "text": "Minimum 0 en $x=2$",
+              "text": "Minimum $0$ en $x=2$",
               "correct": true
             },
             {
-              "text": "Minimum 2 en $x=0$",
+              "text": "Minimum $2$ en $x=0$",
               "correct": false,
               "remediation": "$f(0)=|0-2|=2$, ce n’est pas le minimum."
             },
@@ -484,7 +482,7 @@
               "remediation": "Le module atteint 0 lorsque l’intérieur s’annule."
             },
             {
-              "text": "Minimum -2 en $x=0$",
+              "text": "Minimum $-2$ en $x=0$",
               "correct": false,
               "remediation": "La valeur absolue est toujours $\\ge 0$."
             }
@@ -500,21 +498,21 @@
           "question": "Calculer le produit scalaire de $\\vec{u}(2,1)$ et $\\vec{v}(3,4)$ :",
           "answers": [
             {
-              "text": "10",
+              "text": "$10$",
               "correct": true
             },
             {
-              "text": "14",
+              "text": "$14$",
               "correct": false,
               "remediation": "Tu as additionné les coordonnées au lieu de faire $2\\times3 + 1\\times4$."
             },
             {
-              "text": "11",
+              "text": "$11$",
               "correct": false,
               "remediation": "Vérifie : $2\\times3+1\\times4=6+4=10$."
             },
             {
-              "text": "7",
+              "text": "$7$",
               "correct": false,
               "remediation": "Erreur de calcul : refais le produit composante par composante."
             }
@@ -524,21 +522,21 @@
           "question": "Quelle est la norme du vecteur $\\vec{u}(3,4)$ ?",
           "answers": [
             {
-              "text": "5",
+              "text": "$5$",
               "correct": true
             },
             {
-              "text": "7",
+              "text": "$7$",
               "correct": false,
               "remediation": "La norme se calcule avec $\\sqrt{3^2+4^2}=5$, pas $3+4$."
             },
             {
-              "text": "25",
+              "text": "$25$",
               "correct": false,
               "remediation": "Tu as oublié la racine carrée."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "Vérifie la formule $||\\vec{u}||=\\sqrt{x^2+y^2}$."
             }
@@ -559,7 +557,7 @@
             {
               "text": "Ils sont orthogonaux",
               "correct": false,
-              "remediation": "Perpendiculaire signifie produit scalaire nul, pas colinéarité."
+              "remediation": "Orthogonal signifie produit scalaire nul, pas colinéarité."
             },
             {
               "text": "Leur produit scalaire est égal à 1",
@@ -620,21 +618,21 @@
           "question": "Calculer $\\vec{u}\\cdot \\vec{v}$ avec $\\vec{u}=(1,-1)$ et $\\vec{v}=(-2,2)$ :",
           "answers": [
             {
-              "text": "-4",
+              "text": "$-4$",
               "correct": true
             },
             {
-              "text": "4",
+              "text": "$4$",
               "correct": false,
               "remediation": "Vérifie le signe : $1\\times(-2)+(-1)\\times2=-2-2=-4$."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "Le produit scalaire n’est pas nul : ils ne sont pas orthogonaux."
             },
             {
-              "text": "2",
+              "text": "$2$",
               "correct": false,
               "remediation": "Reprends le calcul composante par composante."
             }
@@ -644,31 +642,31 @@
           "question": "Quelle est la norme du vecteur $\\vec{u}=(0,5)$ ?",
           "answers": [
             {
-              "text": "5",
+              "text": "$5$",
               "correct": true
             },
             {
-              "text": "25",
+              "text": "$25$",
               "correct": false,
               "remediation": "La norme est $\\sqrt{0^2+5^2}=5$, pas 25."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "Ce n’est pas le vecteur nul."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "Tu as peut-être confondu avec un vecteur unitaire."
             }
           ]
         },
         {
-          "question": "Si $\\|\\vec{u}\\|\\|\\vec{v}\\|\neq 0$ et $\\vec{u}\\cdot\\vec{v}=0$, alors :",
+          "question": "Si $\\|\\vec{u}\\|\\|\\vec{v}\\|\\neq 0$ et $\\vec{u}\\cdot\\vec{v}=0$, alors :",
           "answers": [
             {
-              "text": "$\\vec{u}$ et $\\vec{v}$ sont perpendiculaires",
+              "text": "$\\vec{u}$ et $\\vec{v}$ sont orthogonaux",
               "correct": true
             },
             {
@@ -689,24 +687,24 @@
           ]
         },
         {
-          "question": "Donner une équation cartésienne de la droite passant par $(0,1)$ et de vecteur directeur $(2,3)$ :",
+          "question": "Donner une équation cartésienne de la droite <br />passant par $(0,1)$ et de vecteur directeur $(2,3)$ :",
           "answers": [
             {
-              "text": "3x - 2y + 2 = 0",
+              "text": "$3x - 2y + 2 = 0$",
               "correct": true
             },
             {
-              "text": "2x + 3y - 1 = 0",
+              "text": "$2x + 3y - 1 = 0$",
               "correct": false,
               "remediation": "Teste le point $(0,1)$ : $2\\times0 + 3\\times1 - 1 = 2 \\neq 0$."
             },
             {
-              "text": "y=2x+1",
+              "text": "$y=2x+1$",
               "correct": false,
               "remediation": "Le coefficient directeur de cette forme est 2, pas $3/2$."
             },
             {
-              "text": "y=x+1",
+              "text": "$y=x+1$",
               "correct": false,
               "remediation": "Le vecteur directeur de $y=x+1$ est $(1,1)$, pas $(2,3)$."
             }
@@ -730,7 +728,7 @@
               "remediation": "Seul le vecteur nul est colinéaire à tous."
             },
             {
-              "text": "$\\vec{u}$ est toujours perpendiculaire",
+              "text": "$\\vec{u}$ est orthogonal à lui-même",
               "correct": false,
               "remediation": "Le caractère unitaire ne concerne pas l’angle."
             }
@@ -746,11 +744,11 @@
           "question": "La dérivée de $f(x)=x^2$ est :",
           "answers": [
             {
-              "text": "2x",
+              "text": "$2x$",
               "correct": true
             },
             {
-              "text": "x",
+              "text": "$x$",
               "correct": false,
               "remediation": "Il faut multiplier par l’exposant et diminuer de 1 : $2x$."
             },
@@ -760,7 +758,7 @@
               "remediation": "Ceci est une primitive, pas une dérivée."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "La dérivée de $x$ est 1, pas celle de $x^2$."
             }
@@ -779,7 +777,7 @@
               "remediation": "C’est la dérivée de $\\cos(x)$ qui vaut $-\\sin(x)$."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "La dérivée de $x$ est 1, pas celle de $\\sin(x)$."
             },
@@ -798,12 +796,12 @@
               "correct": true
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "La dérivée de $x$ est 1, pas celle de $e^x$."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "Une fonction constante a pour dérivée 0, $e^x$ n’est pas constante."
             },
@@ -832,14 +830,14 @@
               "remediation": "La dérivée de $x$ est 1, pas celle de $\\ln(x)$."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "$\\ln(x)$ n’est pas une constante."
             }
           ]
         },
         {
-          "question": "Quelle est l’équation de la tangente à $f(x)=x^2$ en $x=1$ ?",
+          "question": "Quelle est l’équation de la tangente à<br /> $f(x)=x^2$ en $x=1$ ?",
           "answers": [
             {
               "text": "$y=2x-1$",
@@ -890,21 +888,21 @@
           "question": "La dérivée de $f(x)=x^3$ est :",
           "answers": [
             {
-              "text": "3x^2",
+              "text": "$3x^2$",
               "correct": true
             },
             {
-              "text": "x^2",
+              "text": "$x^2$",
               "correct": false,
               "remediation": "Il manque le facteur 3 issu de l’exposant."
             },
             {
-              "text": "x^4",
+              "text": "$x^4$",
               "correct": false,
               "remediation": "Ceci ressemble à une primitive."
             },
             {
-              "text": "3x^3",
+              "text": "$3x^3$",
               "correct": false,
               "remediation": "On ne garde pas le même exposant : on diminue de 1."
             }
@@ -923,19 +921,19 @@
               "remediation": "C’est la dérivée de $\\sin(x)$ qui vaut $\\cos(x)$."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "La dérivée de $x$ est 1, pas celle de $\\cos(x)$."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "Ce serait le cas si $\\cos(x)$ était constante."
             }
           ]
         },
         {
-          "question": "La tangente à la courbe $y=f(x)$ en $x=a$ a pour équation :",
+          "question": "La tangente à la courbe $y=f(x)$ <br />en $x=a$ a pour équation :",
           "answers": [
             {
               "text": "$y=f'(a)(x-a)+f(a)$",
@@ -959,7 +957,7 @@
           ]
         },
         {
-          "question": "Soit $f(x)=x^2-4x+3$. En $x=2$, la tangente à la courbe est :",
+          "question": "Soit $f(x)=x^2-4x+3$. <br />En $x=2$, la tangente à la courbe est :",
           "answers": [
             {
               "text": "$y=-1$",
@@ -989,7 +987,7 @@
       "label": "Suites numériques",
       "questions": [
         {
-          "question": "Soit la suite arithmétique définie par $u_0=2$ et raison $r=3$. \n Quelle est l’expression de $u_n$ ?",
+          "question": "Soit la suite arithmétique définie par $u_0=2$ et raison $r=3$. <br />Quelle est l’expression de $u_n$ ?",
           "answers": [
             {
               "text": "$u_n=2+3n$",
@@ -1016,11 +1014,11 @@
           "question": "Soit $u_n=5+2n$. Quelle est la raison de cette suite arithmétique ?",
           "answers": [
             {
-              "text": "2",
+              "text": "$2$",
               "correct": true
             },
             {
-              "text": "5",
+              "text": "$5$",
               "correct": false,
               "remediation": "5 est le terme initial $u_0$, pas la raison."
             },
@@ -1030,7 +1028,7 @@
               "remediation": "La raison est une constante, pas l’indice $n$."
             },
             {
-              "text": "7",
+              "text": "$7$",
               "correct": false,
               "remediation": "Calcule $u_{n+1}-u_n$ : c’est 2."
             }
@@ -1064,16 +1062,16 @@
           "question": "Soit $u_n=3\\times 2^n$. Quelle est la raison de cette suite géométrique ?",
           "answers": [
             {
-              "text": "2",
+              "text": "$2$",
               "correct": true
             },
             {
-              "text": "3",
+              "text": "$3$",
               "correct": false,
               "remediation": "3 est le premier terme $u_0$, pas la raison."
             },
             {
-              "text": "6",
+              "text": "$6$",
               "correct": false,
               "remediation": "La raison est $q$ uniquement, pas $u_0\\times q$."
             },
@@ -1085,67 +1083,67 @@
           ]
         },
         {
-          "question": "Soit une suite arithmétique de raison $r=5$. \n On sait que $u_3=20$. Que vaut $u_0$ ?",
+          "question": "Soit une suite arithmétique de raison $r=5$. <br />On sait que $u_3=20$. Que vaut $u_0$ ?",
           "answers": [
             {
-              "text": "5",
+              "text": "$5$",
               "correct": true
             },
             {
-              "text": "15",
+              "text": "$15$",
               "correct": false,
               "remediation": "$u_3=u_0+3r=20 \\Rightarrow u_0=20-15=5$."
             },
             {
-              "text": "25",
+              "text": "$25$",
               "correct": false,
               "remediation": "Tu as additionné au lieu de soustraire $3r$."
             },
             {
-              "text": "0",
+              "text": "$0$",
               "correct": false,
               "remediation": "Applique la formule générale : $u_n=u_0+nr$."
             }
           ]
         },
         {
-          "question": "Soit une suite géométrique de raison $q=3$. \n On sait que $u_2=27$. Que vaut $u_0$ ?",
+          "question": "Soit une suite géométrique de raison $q=3$. <br />On sait que $u_2=27$. Que vaut $u_0$ ?",
           "answers": [
             {
-              "text": "3",
+              "text": "$3$",
               "correct": true
             },
             {
-              "text": "9",
+              "text": "$9$",
               "correct": false,
               "remediation": "$u_2=u_0 q^2=u_0\\times 9=27 \\Rightarrow u_0=3$."
             },
             {
-              "text": "81",
+              "text": "$81$",
               "correct": false,
               "remediation": "Il fallait diviser par $q^2$, pas multiplier."
             },
             {
-              "text": "1",
+              "text": "$1$",
               "correct": false,
               "remediation": "Vérifie : $27/9=3$."
             }
           ]
         },
         {
-          "question": "On définit une suite par récurrence : $u_0=1$, $u_{n+1}=u_n+2$. \n Quelle est la nature de la suite ?",
+          "question": "On définit une suite par récurrence : $u_0=1$, $u_{n+1}=u_n+2$. <br />Quelle est la nature de la suite ?",
           "answers": [
             {
-              "text": "Arithmétique, de raison 2",
+              "text": "Arithmétique, de raison $2$",
               "correct": true
             },
             {
-              "text": "Géométrique, de raison 2",
+              "text": "Géométrique, de raison $2$",
               "correct": false,
               "remediation": "Ici on ajoute 2 à chaque étape, on ne multiplie pas par 2."
             },
             {
-              "text": "Arithmétique, de raison 1",
+              "text": "Arithmétrique, de raison $1$",
               "correct": false,
               "remediation": "La raison est la différence $u_{n+1}-u_n=2$."
             },
@@ -1157,19 +1155,19 @@
           ]
         },
         {
-          "question": "On définit une suite par récurrence : $u_0=2$, $u_{n+1}=3u_n$. \n Quelle est la nature de la suite ?",
+          "question": "On définit une suite par récurrence : $u_0=2$, $u_{n+1}=3u_n$. <br />Quelle est la nature de la suite ?",
           "answers": [
             {
-              "text": "Géométrique, de raison 3",
+              "text": "Géométrique, de raison $3$",
               "correct": true
             },
             {
-              "text": "Arithmétique, de raison 3",
+              "text": "Arithmétique, de raison $3$",
               "correct": false,
               "remediation": "La récurrence est multiplicative, pas additive."
             },
             {
-              "text": "Arithmétique, de raison 2",
+              "text": "Arithmétique, de raison $2$",
               "correct": false,
               "remediation": "2 est $u_0$, pas la raison."
             },
@@ -1184,21 +1182,21 @@
           "question": "Soit $u_n=2n+1$. Que vaut $u_{10}$ ?",
           "answers": [
             {
-              "text": "21",
+              "text": "$21$",
               "correct": true
             },
             {
-              "text": "19",
+              "text": "$19$",
               "correct": false,
               "remediation": "Calcul : $2\\times10+1=21$."
             },
             {
-              "text": "20",
+              "text": "$20$",
               "correct": false,
               "remediation": "Tu as oublié le $+1$."
             },
             {
-              "text": "11",
+              "text": "$11$",
               "correct": false,
               "remediation": "Tu as peut-être confondu l’indice."
             }
@@ -1208,21 +1206,21 @@
           "question": "Soit $u_n=2^n$. Que vaut $u_5$ ?",
           "answers": [
             {
-              "text": "32",
+              "text": "$32$",
               "correct": true
             },
             {
-              "text": "25",
+              "text": "$25$",
               "correct": false,
               "remediation": "Tu as lu $2n$ au lieu de $2^n$."
             },
             {
-              "text": "64",
+              "text": "$64$",
               "correct": false,
               "remediation": "C’est $2^6$, pas $2^5$."
             },
             {
-              "text": "16",
+              "text": "$16$",
               "correct": false,
               "remediation": "C’est $2^4$, pas $2^5$."
             }

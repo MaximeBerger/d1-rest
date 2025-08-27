@@ -56,6 +56,7 @@ window.renderThemesHome = function() {
 }
 
 window.renderThemesPanel = function() {
+  if (!window.panel) return;
   // Injecte une section "Thèmes" au bas du panneau (non cliquable)
   let section = window.panel.querySelector('#themesSection');
   if (!section) {
@@ -404,7 +405,7 @@ function renderAnswersGroups(currentList, nextList = null) {
        div.style.color = '#1f2937';
        div.style.paddingLeft = '14px';
        div.style.pointerEvents = 'none'; // Permettre les clics sur le canvas
-      div.innerHTML = (c.id ? `<strong>${c.id} — </strong>` : '') + c.text;
+      div.innerHTML = (c.id ? `<strong style="margin-right:6px">${c.id} —</strong>` : '') + c.text;
       group.appendChild(div);
     }
     return group;
@@ -430,8 +431,8 @@ let locked = false;
 
 function refreshStats() {
   if (!window.state.current) return;
-  window.statIndex.textContent = String(qIndex + 1);
-  window.statTotal.textContent = String(window.state.current.engine.total);
+  if (window.statIndex) window.statIndex.textContent = String(qIndex + 1);
+  if (window.statTotal) window.statTotal.textContent = String(window.state.current.engine.total);
 }
 
 function quizGet() {
@@ -452,8 +453,29 @@ function refreshQuestionOverlay() {
   if (qEl) {
     // Utiliser l'index UI courant pour garantir la synchro avec l'animation
     const q = window.state.current.engine.questions[qIndex];
-    qEl.innerHTML = q ? q.question : '';
-    if (window.MathJax?.typesetPromise) MathJax.typesetPromise([qEl]);
+    qEl.innerHTML = '';
+    if (q && q.question != null) {
+      const container = document.createElement('div');
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+
+      const parts = Array.isArray(q.question)
+        ? q.question
+        : String(q.question).split('\n');
+
+      for (const part of parts) {
+        const line = document.createElement('div');
+        line.style.display = 'block';
+        line.style.textAlign = 'center';
+        line.style.margin = '4px 0';
+        line.innerHTML = part;
+        container.appendChild(line);
+      }
+      qEl.appendChild(container);
+      if (window.MathJax?.typesetPromise) MathJax.typesetPromise([qEl]);
+    }
   }
 }
 
@@ -631,7 +653,7 @@ window.__themeQuiz = {
 
 // Layout des cartes de réponses
 function layoutCards() {
-  const W = 800, H = 600; // canvas taille
+  const W = 1000, H = 600; // canvas taille
   const startY = 200;
   const Hc = Math.round(68 * 1.2), gap = 12, Wc = W - 48, x = 24; // Augmentation de 20% de la hauteur
   const total = cards.length * Hc + (cards.length - 1) * gap;
