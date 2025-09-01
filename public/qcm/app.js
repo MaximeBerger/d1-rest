@@ -187,7 +187,7 @@ function renderAnswersGroups(currentList, nextList = null) {
        div.style.color = '#1f2937';
        div.style.paddingLeft = '14px';
        div.style.pointerEvents = 'none'; // Permettre les clics sur le canvas
-      div.innerHTML = (c.id ? `<strong style="margin-right:6px">${c.id} — </strong>` : '') + c.text;
+      div.innerHTML = (c.id ? `<strong style="margin-right:6px">${c.id}. </strong>` : '') + c.text;
       group.appendChild(div);
     }
     return group;
